@@ -3,428 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dansk — Learn Danish Verbs</title>
+<title>Dansk — Learn Danish</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0ece3; --paper: #faf8f4; --ink: #1c1814; --muted: #8a8078;
+  --accent: #c94f1e; --accent2: #2c5f8a; --green: #2d7a4f; --border: #d6cfc4;
+}
+body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
 
-  :root {
-    --bg: #f0ece3;
-    --paper: #faf8f4;
-    --ink: #1c1814;
-    --muted: #8a8078;
-    --accent: #c94f1e;
-    --accent2: #2c5f8a;
-    --green: #2d7a4f;
-    --border: #d6cfc4;
-    --shadow: rgba(28,24,20,0.08);
-  }
+/* ── HEADER ── */
+header {
+  padding: 20px 40px 16px; border-bottom: 2px solid var(--ink);
+  background: var(--paper); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; letter-spacing: -0.5px; }
+h1 em { color: var(--accent); font-style: italic; }
+.tagline { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+.version {
+  margin-left: auto; font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 2px; padding: 3px 10px; white-space: nowrap;
+}
 
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+/* ── NAV ── */
+nav { display: flex; background: var(--paper); border-bottom: 1px solid var(--border); padding: 0 40px; overflow-x: auto; }
+.tab {
+  padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border: none;
+  background: none; color: var(--muted); border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s; white-space: nowrap;
+}
+.tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--ink); }
 
-  /* HEADER */
-  header {
-    padding: 24px 40px 18px;
-    border-bottom: 2px solid var(--ink);
-    background: var(--paper);
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    letter-spacing: -0.5px;
-  }
-  h1 em { color: var(--accent); font-style: italic; }
-  .tagline {
-    font-size: 0.68rem;
-    color: var(--muted);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
+/* ── MAIN ── */
+main { flex: 1; padding: 32px 40px; max-width: 940px; margin: 0 auto; width: 100%; }
+.view { display: none; animation: fadeIn 0.2s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.drill-wrap { max-width: 560px; margin: 0 auto; }
 
-  /* NAV */
-  nav {
-    display: flex;
-    background: var(--paper);
-    border-bottom: 1px solid var(--border);
-    padding: 0 40px;
-  }
-  .tab {
-    padding: 11px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: var(--muted);
-    border-bottom: 3px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
-  .tab:hover { color: var(--ink); }
+/* ── LABELS ── */
+.section-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.sub-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 16px; margin-bottom: 6px; }
 
-  /* MAIN */
-  main { flex: 1; padding: 36px 40px; max-width: 900px; margin: 0 auto; width: 100%; }
-  .view { display: none; animation: fadeIn 0.2s ease; }
-  .view.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* ── FILTER BUTTONS ── */
+.filter-row { display: flex; gap: 7px; margin-bottom: 10px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 5px 12px; border: 1.5px solid var(--border); border-radius: 2px;
+  background: none; font-family: 'DM Mono', monospace; font-size: 0.66rem;
+  letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s;
+}
+.filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.filter-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
 
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
+/* ── CARD ── */
+.card {
+  background: var(--paper); border: 1.5px solid var(--border); border-radius: 4px;
+  padding: 48px 40px 36px; text-align: center; box-shadow: 4px 4px 0 var(--border);
+  position: relative; min-height: 280px; display: flex; flex-direction: column;
+  justify-content: center; gap: 14px; margin-bottom: 0;
+}
+.card-meta {
+  position: absolute; top: 16px; left: 20px; right: 20px;
+  display: flex; justify-content: space-between;
+  font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.card-prompt-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.card-main { font-family: 'Playfair Display', serif; font-size: 2rem; font-style: italic; color: var(--ink); line-height: 1.2; }
+.card-sub { font-size: 0.75rem; color: var(--muted); }
 
-  /* ============================
-     QUIZ VIEW
-  ============================= */
-  .quiz-wrap { max-width: 560px; margin: 0 auto; }
+/* pronoun badge */
+.pronoun-block { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pronoun-badge {
+  display: inline-block; background: var(--ink); color: #fff;
+  padding: 6px 22px; border-radius: 2px; font-family: 'DM Mono', monospace;
+  font-size: 1.1rem; letter-spacing: 0.08em;
+}
+.pronoun-en { font-size: 0.7rem; color: var(--muted); }
 
-  .filter-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
-  .filter-btn {
-    padding: 6px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: var(--muted);
-    transition: all 0.15s;
-  }
-  .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
-  .filter-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+/* answer */
+.answer-input {
+  width: 100%; padding: 12px 16px; font-family: 'DM Mono', monospace; font-size: 1.1rem;
+  border: 1.5px solid var(--border); border-radius: 2px; background: var(--bg);
+  color: var(--ink); text-align: center; outline: none; transition: border-color 0.15s; margin-top: 8px;
+}
+.answer-input:focus { border-color: var(--accent2); }
+.answer-input.correct { border-color: var(--green); background: #edf7f2; }
+.answer-input.wrong { border-color: var(--accent); background: #fef0ec; }
 
-  /* CARD */
-  .card {
-    background: var(--paper);
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    padding: 44px 40px 36px;
-    text-align: center;
-    box-shadow: 4px 4px 0 var(--border);
-    position: relative;
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 14px;
-  }
+.feedback-msg { font-size: 0.72rem; letter-spacing: 0.06em; min-height: 18px; margin-top: 4px; }
+.feedback-msg.correct { color: var(--green); }
+.feedback-msg.wrong { color: var(--accent); }
 
-  .card-category {
-    position: absolute;
-    top: 16px;
-    left: 20px;
-    font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .card-counter {
-    position: absolute;
-    top: 16px;
-    right: 20px;
-    font-size: 0.6rem;
-    color: var(--muted);
-  }
+/* reveal */
+.reveal-box { display: none; padding: 14px 16px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 2px; margin-top: 10px; }
+.reveal-box.show { display: block; }
+.reveal-answer { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--accent2); margin-bottom: 4px; }
+.reveal-note { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+.reveal-note strong { color: var(--ink); }
 
-  .card-prompt-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .card-english {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-style: italic;
-    color: var(--ink);
-    line-height: 1.2;
-  }
+/* conjugation mini table */
+.conj-mini { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.72rem; text-align: left; }
+.conj-mini td { padding: 4px 8px; border-bottom: 1px solid var(--border); }
+.conj-mini td:first-child { color: var(--muted); width: 100px; }
+.conj-mini td:last-child { color: var(--accent2); font-weight: 500; }
+.conj-mini tr.hl td { background: rgba(44,95,138,0.10); }
+.conj-mini tr:last-child td { border-bottom: none; }
 
-  .answer-area { margin-top: 8px; }
+/* animal forms table in reveal */
+.forms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; margin-top: 10px; font-size: 0.72rem; text-align: left; }
+.forms-grid .form-cell-label { color: var(--muted); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.forms-grid .form-cell-val { color: var(--accent2); font-weight: 500; }
 
-  .answer-input {
-    width: 100%;
-    padding: 12px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 1.1rem;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: var(--bg);
-    color: var(--ink);
-    text-align: center;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .answer-input:focus { border-color: var(--accent2); }
-  .answer-input.correct { border-color: var(--green); background: #edf7f2; }
-  .answer-input.wrong { border-color: var(--accent); background: #fef0ec; }
+/* actions */
+.card-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: center; }
+.btn {
+  padding: 10px 24px; border: 1.5px solid var(--ink); border-radius: 2px;
+  font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; background: none; color: var(--ink); transition: all 0.15s;
+}
+.btn:hover { background: var(--ink); color: #fff; }
+.btn.primary { background: var(--ink); color: #fff; }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+.btn.ghost { border-color: var(--border); color: var(--muted); }
+.btn.ghost:hover { background: var(--border); color: var(--ink); }
+.empty-msg { text-align: center; color: var(--muted); padding: 60px 0; font-size: 0.85rem; line-height: 1.8; }
 
-  .reveal-box {
-    display: none;
-    padding: 16px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    margin-top: 12px;
-  }
-  .reveal-box.show { display: block; }
-  .reveal-danish {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    color: var(--accent2);
-    margin-bottom: 4px;
-  }
-  .reveal-forms {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
-  .reveal-forms span { color: var(--ink); }
+/* ── REFERENCE ── */
+.ref-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.search-input {
+  flex: 1; min-width: 180px; padding: 9px 14px; font-family: 'DM Mono', monospace;
+  font-size: 0.8rem; border: 1.5px solid var(--border); border-radius: 2px;
+  background: var(--paper); color: var(--ink); outline: none; transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--accent2); }
+.search-input::placeholder { color: var(--muted); }
+select {
+  padding: 8px 12px; font-family: 'DM Mono', monospace; font-size: 0.75rem;
+  border: 1.5px solid var(--border); border-radius: 2px; background: var(--paper);
+  color: var(--ink); outline: none; cursor: pointer;
+}
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { border-bottom: 2px solid var(--ink); }
+th { padding: 8px 12px; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: left; font-weight: 400; white-space: nowrap; }
+td { padding: 9px 12px; font-size: 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: var(--paper); }
+.cell-en { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.92rem; }
+.cell-da { color: var(--accent2); font-weight: 500; }
+.tag { display: inline-block; padding: 2px 7px; border: 1px solid var(--border); border-radius: 2px; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.gender-tag { display: inline-block; padding: 2px 6px; border-radius: 2px; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+.gender-en { background: #e8f0f7; color: var(--accent2); }
+.gender-et { background: #f7ede8; color: var(--accent); }
 
-  .feedback-msg {
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    min-height: 18px;
-    margin-top: 6px;
-  }
-  .feedback-msg.correct { color: var(--green); }
-  .feedback-msg.wrong { color: var(--accent); }
-
-  .card-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    justify-content: center;
-  }
-  .btn {
-    padding: 10px 24px;
-    border: 1.5px solid var(--ink);
-    border-radius: 2px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    background: none;
-    color: var(--ink);
-    transition: all 0.15s;
-  }
-  .btn:hover { background: var(--ink); color: #fff; }
-  .btn.primary { background: var(--ink); color: #fff; }
-  .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
-  .btn.ghost { border-color: var(--border); color: var(--muted); }
-  .btn.ghost:hover { background: var(--border); color: var(--ink); }
-
-  .quiz-empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 60px 0;
-    font-size: 0.85rem;
-  }
-
-  /* ============================
-     REFERENCE VIEW
-  ============================= */
-  .ref-controls {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .search-input {
-    flex: 1;
-    min-width: 180px;
-    padding: 9px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: var(--paper);
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .search-input:focus { border-color: var(--accent2); }
-  .search-input::placeholder { color: var(--muted); }
-
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { border-bottom: 2px solid var(--ink); }
-  th {
-    padding: 8px 14px;
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: left;
-    font-weight: 400;
-    white-space: nowrap;
-  }
-  td {
-    padding: 11px 14px;
-    font-size: 0.82rem;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  tr:hover td { background: var(--paper); }
-  .cell-english { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; }
-  .cell-danish { color: var(--accent2); font-weight: 500; }
-  .cell-category {
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* ============================
-     MANAGE VIEW
-  ============================= */
-  .manage-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-  }
-  @media (max-width: 620px) { .manage-grid { grid-template-columns: 1fr; } }
-
-  .manage-panel {
-    background: var(--paper);
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    padding: 24px;
-  }
-  .manage-panel h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-  }
-  .manage-panel p {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-bottom: 16px;
-    line-height: 1.6;
-  }
-
-  .form-group { margin-bottom: 12px; }
-  label {
-    display: block;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 5px;
-  }
-  input[type=text], select, textarea {
-    width: 100%;
-    padding: 8px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: var(--bg);
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  input[type=text]:focus, select:focus, textarea:focus { border-color: var(--accent2); }
-  textarea { resize: vertical; min-height: 80px; }
-
-  .word-list-manage {
-    max-height: 320px;
-    overflow-y: auto;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    margin-top: 16px;
-  }
-  .word-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.75rem;
-  }
-  .word-item:last-child { border-bottom: none; }
-  .word-item-english { flex: 1; font-style: italic; }
-  .word-item-danish { flex: 1; color: var(--accent2); }
-  .word-item-cat { color: var(--muted); font-size: 0.62rem; }
-  .delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1;
-    padding: 2px 4px;
-    transition: color 0.15s;
-  }
-  .delete-btn:hover { color: var(--accent); }
-
-  .status-msg {
-    font-size: 0.7rem;
-    min-height: 16px;
-    margin-top: 8px;
-    color: var(--green);
-  }
-
-  /* IMPORT/EXPORT */
-  .paste-area {
-    width: 100%;
-    padding: 10px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: var(--bg);
-    color: var(--ink);
-    resize: vertical;
-    min-height: 110px;
-    outline: none;
-  }
-  .paste-area:focus { border-color: var(--accent2); }
-
-  /* MOBILE */
-  @media (max-width: 600px) {
-    header, nav, main { padding-left: 20px; padding-right: 20px; }
-    h1 { font-size: 1.6rem; }
-    .card { padding: 36px 24px 28px; }
-    .card-english { font-size: 1.5rem; }
-  }
+@media (max-width: 600px) {
+  header, nav, main { padding-left: 20px; padding-right: 20px; }
+  h1 { font-size: 1.6rem; }
+  .card { padding: 40px 20px 28px; }
+  .card-main { font-size: 1.5rem; }
+}
 </style>
 </head>
 <body>
@@ -432,484 +173,826 @@
 <header>
   <div>
     <h1>D<em>a</em>nsk</h1>
-    <div class="tagline">Danish Verb Practice</div>
+    <div class="tagline">Danish Practice</div>
   </div>
+  <div class="version">v2.0</div>
 </header>
 
 <nav>
-  <button class="tab active" onclick="showView('quiz')">Practice</button>
-  <button class="tab" onclick="showView('reference')">Reference</button>
-  <button class="tab" onclick="showView('manage')">Manage Words</button>
+  <button class="tab active" onclick="showView('translate',this)">Translate</button>
+  <button class="tab" onclick="showView('conjugation',this)">Conjugation</button>
+  <button class="tab" onclick="showView('animals',this)">Animals</button>
+  <button class="tab" onclick="showView('reference',this)">Reference</button>
 </nav>
 
 <main>
 
-  <!-- QUIZ VIEW -->
-  <div id="view-quiz" class="view active">
-    <div class="quiz-wrap">
-      <div class="section-label">Practice — English → Danish</div>
-      <div class="filter-row" id="quiz-filters">
-        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-      </div>
-      <div id="quiz-card-area"></div>
+  <!-- ══ TRANSLATE ══ -->
+  <div id="view-translate" class="view active">
+    <div class="drill-wrap">
+      <div class="section-label">Translate — English to Danish</div>
+      <div class="sub-label">Category</div>
+      <div class="filter-row" id="tr-cat-filters"></div>
+      <div id="tr-card"></div>
     </div>
   </div>
 
-  <!-- REFERENCE VIEW -->
+  <!-- ══ CONJUGATION ══ -->
+  <div id="view-conjugation" class="view">
+    <div class="drill-wrap">
+      <div class="section-label">Conjugation drill — pronoun · tense · verb</div>
+      <div class="sub-label">Verb</div>
+      <div class="filter-row" id="cj-verb-filters"></div>
+      <div class="sub-label">Tense</div>
+      <div class="filter-row" id="cj-tense-filters"></div>
+      <div id="cj-card"></div>
+    </div>
+  </div>
+
+  <!-- ══ ANIMALS ══ -->
+  <div id="view-animals" class="view">
+    <div class="drill-wrap">
+      <div class="section-label">Animals — Danish nouns with gender & forms</div>
+      <div class="sub-label">Group</div>
+      <div class="filter-row" id="an-group-filters"></div>
+      <div class="sub-label">Practice mode</div>
+      <div class="filter-row" id="an-mode-filters">
+        <button class="filter-btn active" onclick="setAnimalMode('en-da',this)">English → Danish</button>
+        <button class="filter-btn" onclick="setAnimalMode('da-en',this)">Danish → English</button>
+      </div>
+      <div id="an-card"></div>
+    </div>
+  </div>
+
+  <!-- ══ REFERENCE ══ -->
   <div id="view-reference" class="view">
-    <div class="section-label">Reference — All Words</div>
-    <div class="ref-controls">
-      <input class="search-input" type="text" placeholder="Search English or Danish…" oninput="renderReference(this.value)">
-      <select onchange="renderReference(document.querySelector('.search-input').value, this.value)" id="ref-cat-filter" style="flex:0;width:auto;min-width:140px;">
-        <option value="all">All categories</option>
-      </select>
+    <div class="section-label">Reference</div>
+    <div class="filter-row" id="ref-type-filters">
+      <button class="filter-btn active" onclick="setRefType('verbs',this)">Verbs</button>
+      <button class="filter-btn" onclick="setRefType('animals',this)">Animals</button>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>English</th>
-            <th>Danish (infinitive)</th>
-            <th>Present</th>
-            <th>Past</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody id="ref-body"></tbody>
-      </table>
+
+    <!-- verb reference -->
+    <div id="ref-verbs-section">
+      <div class="ref-controls">
+        <input class="search-input" id="ref-verb-search" type="text" placeholder="Search…" oninput="renderVerbRef()">
+        <select id="ref-verb-cat" onchange="renderVerbRef()">
+          <option value="all">All categories</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>English</th><th>Infinitive</th><th>Present</th><th>Past</th>
+            <th>Pres. perfect</th><th>Past perfect</th><th>Future</th><th>Conditional</th>
+            <th>Imp. perfect</th><th>Passive</th><th>Imperative</th><th>Cat.</th>
+          </tr></thead>
+          <tbody id="ref-verb-body"></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- MANAGE VIEW -->
-  <div id="view-manage" class="view">
-    <div class="section-label">Manage word list</div>
-    <div class="manage-grid">
-
-      <div class="manage-panel">
-        <h3>Add a word</h3>
-        <p>Add verbs or phrases one at a time. All fields except English are optional but recommended.</p>
-        <div class="form-group">
-          <label>English</label>
-          <input type="text" id="add-english" placeholder="to be">
-        </div>
-        <div class="form-group">
-          <label>Danish (infinitive / base form)</label>
-          <input type="text" id="add-danish" placeholder="at være">
-        </div>
-        <div class="form-group">
-          <label>Present tense</label>
-          <input type="text" id="add-present" placeholder="er">
-        </div>
-        <div class="form-group">
-          <label>Past tense</label>
-          <input type="text" id="add-past" placeholder="var">
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <input type="text" id="add-category" placeholder="Essential">
-        </div>
-        <button class="btn primary" onclick="addWord()">Add word</button>
-        <div class="status-msg" id="add-status"></div>
-
-        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
-        <h3 style="margin-bottom:6px;">Bulk import</h3>
-        <p>Paste lines in this format:<br><code>English | Danish | Present | Past | Category</code><br>Category is optional.</p>
-        <textarea class="paste-area" id="bulk-paste" placeholder="to run | at løbe | løber | løb | Movement&#10;to eat | at spise | spiser | spiste | Food"></textarea>
-        <button class="btn" onclick="bulkImport()" style="margin-top:8px;">Import</button>
-        <div class="status-msg" id="bulk-status"></div>
+    <!-- animal reference -->
+    <div id="ref-animals-section" style="display:none;">
+      <div class="ref-controls">
+        <input class="search-input" id="ref-animal-search" type="text" placeholder="Search…" oninput="renderAnimalRef()">
+        <select id="ref-animal-group" onchange="renderAnimalRef()">
+          <option value="all">All groups</option>
+        </select>
       </div>
-
-      <div class="manage-panel">
-        <h3>Word list <span id="word-count" style="color:var(--muted);font-size:0.75rem;font-family:'DM Mono',monospace;"></span></h3>
-        <p>Click × to remove a word. Changes are saved automatically in your browser.</p>
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <button class="btn ghost" onclick="exportWords()" style="flex:1;">Export JSON</button>
-          <label class="btn ghost" style="flex:1;text-align:center;cursor:pointer;">
-            Import JSON
-            <input type="file" accept=".json" onchange="importJSON(event)" style="display:none;">
-          </label>
-        </div>
-        <div class="word-list-manage" id="manage-list"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>English</th><th>Danish</th><th>Gender</th><th>Plural</th>
+            <th>Male</th><th>Female</th><th>Young</th><th>Group</th>
+          </tr></thead>
+          <tbody id="ref-animal-body"></tbody>
+        </table>
       </div>
-
     </div>
   </div>
 
 </main>
 
 <script>
-// =====================================================
-// DATA — starter pack
-// =====================================================
-const DEFAULTS = [
-  // Essential
-  { english: "to be",        danish: "at være",    present: "er",       past: "var",       category: "Essential" },
-  { english: "to have",      danish: "at have",    present: "har",      past: "havde",     category: "Essential" },
-  { english: "to become",    danish: "at blive",   present: "bliver",   past: "blev",      category: "Essential" },
-  { english: "to do / make", danish: "at gøre",    present: "gør",      past: "gjorde",    category: "Essential" },
-  { english: "to get",       danish: "at få",      present: "får",      past: "fik",       category: "Essential" },
-  { english: "to say",       danish: "at sige",    present: "siger",    past: "sagde",     category: "Essential" },
-  { english: "to know (fact)",danish:"at vide",    present: "ved",      past: "vidste",    category: "Essential" },
-  { english: "to know (person)",danish:"at kende", present: "kender",   past: "kendte",    category: "Essential" },
-  { english: "to want",      danish: "at ville",   present: "vil",      past: "ville",     category: "Essential" },
-  { english: "to can / be able to", danish: "at kunne", present: "kan", past: "kunne",    category: "Essential" },
-  { english: "to must / have to",   danish: "at skulle", present: "skal",past: "skulle",  category: "Essential" },
-  { english: "to may / be allowed", danish: "at måtte",  present: "må",  past: "måtte",   category: "Essential" },
-  // Movement
-  { english: "to go",        danish: "at gå",      present: "går",      past: "gik",       category: "Movement" },
-  { english: "to come",      danish: "at komme",   present: "kommer",   past: "kom",       category: "Movement" },
-  { english: "to run",       danish: "at løbe",    present: "løber",    past: "løb",       category: "Movement" },
-  { english: "to drive",     danish: "at køre",    present: "kører",    past: "kørte",     category: "Movement" },
-  { english: "to travel",    danish: "at rejse",   present: "rejser",   past: "rejste",    category: "Movement" },
-  { english: "to leave",     danish: "at tage afsted", present: "tager afsted", past: "tog afsted", category: "Movement" },
-  // Communication
-  { english: "to speak",     danish: "at tale",    present: "taler",    past: "talte",     category: "Communication" },
-  { english: "to listen",    danish: "at lytte",   present: "lytter",   past: "lyttede",   category: "Communication" },
-  { english: "to read",      danish: "at læse",    present: "læser",    past: "læste",     category: "Communication" },
-  { english: "to write",     danish: "at skrive",  present: "skriver",  past: "skrev",     category: "Communication" },
-  { english: "to ask",       danish: "at spørge",  present: "spørger",  past: "spurgte",   category: "Communication" },
-  { english: "to answer",    danish: "at svare",   present: "svarer",   past: "svarede",   category: "Communication" },
-  { english: "to understand",danish: "at forstå",  present: "forstår",  past: "forstod",   category: "Communication" },
-  // Daily life
-  { english: "to eat",       danish: "at spise",   present: "spiser",   past: "spiste",    category: "Daily life" },
-  { english: "to drink",     danish: "at drikke",  present: "drikker",  past: "drak",      category: "Daily life" },
-  { english: "to sleep",     danish: "at sove",    present: "sover",    past: "sov",       category: "Daily life" },
-  { english: "to work",      danish: "at arbejde", present: "arbejder", past: "arbejdede", category: "Daily life" },
-  { english: "to buy",       danish: "at købe",    present: "køber",    past: "købte",     category: "Daily life" },
-  { english: "to pay",       danish: "at betale",  present: "betaler",  past: "betalte",   category: "Daily life" },
-  { english: "to open",      danish: "at åbne",    present: "åbner",    past: "åbnede",    category: "Daily life" },
-  { english: "to close",     danish: "at lukke",   present: "lukker",   past: "lukkede",   category: "Daily life" },
-  { english: "to help",      danish: "at hjælpe",  present: "hjælper",  past: "hjalp",     category: "Daily life" },
-  { english: "to think",     danish: "at tænke",   present: "tænker",   past: "tænkte",    category: "Daily life" },
-  { english: "to feel",      danish: "at føle",    present: "føler",    past: "følte",     category: "Daily life" },
-  { english: "to see",       danish: "at se",      present: "ser",      past: "så",        category: "Daily life" },
-  { english: "to find",      danish: "at finde",   present: "finder",   past: "fandt",     category: "Daily life" },
-  { english: "to give",      danish: "at give",    present: "giver",    past: "gav",       category: "Daily life" },
-  { english: "to take",      danish: "at tage",    present: "tager",    past: "tog",       category: "Daily life" },
+// ═══════════════════════════════════════════════
+// PRONOUNS
+// ═══════════════════════════════════════════════
+const PRONOUNS = [
+  { da:'jeg',     en:'I' },
+  { da:'du',      en:'you (sing.)' },
+  { da:'han/hun', en:'he / she' },
+  { da:'den/det', en:'it' },
+  { da:'vi',      en:'we' },
+  { da:'I',       en:'you (pl.)' },
+  { da:'de',      en:'they' },
 ];
 
-// =====================================================
-// STATE
-// =====================================================
-let words = [];
-let quizQueue = [];
-let quizIndex = 0;
-let quizFilter = 'all';
-let revealed = false;
+// ═══════════════════════════════════════════════
+// TENSES
+// ═══════════════════════════════════════════════
+// key: field name on verb object
+const TENSES = [
+  { key:'present',      label:'Present',           note:'jeg er' },
+  { key:'past',         label:'Past',               note:'jeg var' },
+  { key:'presPerfect',  label:'Present perfect',    note:'jeg har været' },
+  { key:'pastPerfect',  label:'Past perfect',       note:'jeg havde været' },
+  { key:'future',       label:'Future',             note:'jeg vil være' },
+  { key:'conditional',  label:'Conditional',        note:'jeg ville være' },
+  { key:'futPerfect',   label:'Future perfect',     note:'jeg vil have været' },
+  { key:'passive',      label:'Passive',            note:'det bruges' },
+  { key:'imperative',   label:'Imperative',         note:'vær!' },
+];
 
-function loadWords() {
-  try {
-    const saved = localStorage.getItem('dansk_words');
-    words = saved ? JSON.parse(saved) : [...DEFAULTS];
-  } catch(e) {
-    words = [...DEFAULTS];
-  }
+// ═══════════════════════════════════════════════
+// VERBS
+// Fields: english, danish, present, past, presPerfect, pastPerfect,
+//         future, conditional, futPerfect, passive, imperative, category
+// Notes on Danish tenses:
+//  - presPerfect = har + past participle
+//  - pastPerfect = havde + past participle
+//  - futPerfect  = vil have + past participle
+//  - passive     = infinitive stem + -es  OR  blive + past participle
+//  - imperative  = verb stem (no ending)
+// ═══════════════════════════════════════════════
+const VERBS = [
+  // ── Essential ──
+  {
+    english:'to be', danish:'at være', category:'Essential',
+    present:'er', past:'var', presPerfect:'har været', pastPerfect:'havde været',
+    future:'vil være', conditional:'ville være', futPerfect:'vil have været',
+    passive:'bliver/er', imperative:'vær',
+  },
+  {
+    english:'to have', danish:'at have', category:'Essential',
+    present:'har', past:'havde', presPerfect:'har haft', pastPerfect:'havde haft',
+    future:'vil have', conditional:'ville have', futPerfect:'vil have haft',
+    passive:'haves', imperative:'hav',
+  },
+  {
+    english:'to become', danish:'at blive', category:'Essential',
+    present:'bliver', past:'blev', presPerfect:'har været', pastPerfect:'havde været',
+    future:'vil blive', conditional:'ville blive', futPerfect:'vil have været',
+    passive:'bliver/blives', imperative:'bliv',
+  },
+  {
+    english:'to do / make', danish:'at gøre', category:'Essential',
+    present:'gør', past:'gjorde', presPerfect:'har gjort', pastPerfect:'havde gjort',
+    future:'vil gøre', conditional:'ville gøre', futPerfect:'vil have gjort',
+    passive:'gøres', imperative:'gør',
+  },
+  {
+    english:'to get', danish:'at få', category:'Essential',
+    present:'får', past:'fik', presPerfect:'har fået', pastPerfect:'havde fået',
+    future:'vil få', conditional:'ville få', futPerfect:'vil have fået',
+    passive:'fås', imperative:'få',
+  },
+  {
+    english:'to say', danish:'at sige', category:'Essential',
+    present:'siger', past:'sagde', presPerfect:'har sagt', pastPerfect:'havde sagt',
+    future:'vil sige', conditional:'ville sige', futPerfect:'vil have sagt',
+    passive:'siges', imperative:'sig',
+  },
+  {
+    english:'to know (fact)', danish:'at vide', category:'Essential',
+    present:'ved', past:'vidste', presPerfect:'har vidst', pastPerfect:'havde vidst',
+    future:'vil vide', conditional:'ville vide', futPerfect:'vil have vidst',
+    passive:'vides', imperative:'vid',
+  },
+  {
+    english:'to know (person)', danish:'at kende', category:'Essential',
+    present:'kender', past:'kendte', presPerfect:'har kendt', pastPerfect:'havde kendt',
+    future:'vil kende', conditional:'ville kende', futPerfect:'vil have kendt',
+    passive:'kendes', imperative:'kend',
+  },
+  {
+    english:'to want', danish:'at ville', category:'Essential',
+    present:'vil', past:'ville', presPerfect:'har villet', pastPerfect:'havde villet',
+    future:'vil ville', conditional:'ville ville', futPerfect:'vil have villet',
+    passive:'—', imperative:'—',
+  },
+  {
+    english:'to can', danish:'at kunne', category:'Essential',
+    present:'kan', past:'kunne', presPerfect:'har kunnet', pastPerfect:'havde kunnet',
+    future:'vil kunne', conditional:'ville kunne', futPerfect:'vil have kunnet',
+    passive:'—', imperative:'—',
+  },
+  {
+    english:'to must', danish:'at skulle', category:'Essential',
+    present:'skal', past:'skulle', presPerfect:'har skullet', pastPerfect:'havde skullet',
+    future:'vil skulle', conditional:'ville skulle', futPerfect:'vil have skullet',
+    passive:'—', imperative:'—',
+  },
+  {
+    english:'to may', danish:'at måtte', category:'Essential',
+    present:'må', past:'måtte', presPerfect:'har måttet', pastPerfect:'havde måttet',
+    future:'vil måtte', conditional:'ville måtte', futPerfect:'vil have måttet',
+    passive:'—', imperative:'—',
+  },
+  // ── Movement ──
+  {
+    english:'to go', danish:'at gå', category:'Movement',
+    present:'går', past:'gik', presPerfect:'har gået', pastPerfect:'havde gået',
+    future:'vil gå', conditional:'ville gå', futPerfect:'vil have gået',
+    passive:'gås', imperative:'gå',
+  },
+  {
+    english:'to come', danish:'at komme', category:'Movement',
+    present:'kommer', past:'kom', presPerfect:'har kommet', pastPerfect:'havde kommet',
+    future:'vil komme', conditional:'ville komme', futPerfect:'vil have kommet',
+    passive:'kommes', imperative:'kom',
+  },
+  {
+    english:'to run', danish:'at løbe', category:'Movement',
+    present:'løber', past:'løb', presPerfect:'har løbet', pastPerfect:'havde løbet',
+    future:'vil løbe', conditional:'ville løbe', futPerfect:'vil have løbet',
+    passive:'løbes', imperative:'løb',
+  },
+  {
+    english:'to drive', danish:'at køre', category:'Movement',
+    present:'kører', past:'kørte', presPerfect:'har kørt', pastPerfect:'havde kørt',
+    future:'vil køre', conditional:'ville køre', futPerfect:'vil have kørt',
+    passive:'køres', imperative:'kør',
+  },
+  {
+    english:'to travel', danish:'at rejse', category:'Movement',
+    present:'rejser', past:'rejste', presPerfect:'har rejst', pastPerfect:'havde rejst',
+    future:'vil rejse', conditional:'ville rejse', futPerfect:'vil have rejst',
+    passive:'rejses', imperative:'rejs',
+  },
+  // ── Communication ──
+  {
+    english:'to speak', danish:'at tale', category:'Communication',
+    present:'taler', past:'talte', presPerfect:'har talt', pastPerfect:'havde talt',
+    future:'vil tale', conditional:'ville tale', futPerfect:'vil have talt',
+    passive:'tales', imperative:'tal',
+  },
+  {
+    english:'to listen', danish:'at lytte', category:'Communication',
+    present:'lytter', past:'lyttede', presPerfect:'har lyttet', pastPerfect:'havde lyttet',
+    future:'vil lytte', conditional:'ville lytte', futPerfect:'vil have lyttet',
+    passive:'lyttes', imperative:'lyt',
+  },
+  {
+    english:'to read', danish:'at læse', category:'Communication',
+    present:'læser', past:'læste', presPerfect:'har læst', pastPerfect:'havde læst',
+    future:'vil læse', conditional:'ville læse', futPerfect:'vil have læst',
+    passive:'læses', imperative:'læs',
+  },
+  {
+    english:'to write', danish:'at skrive', category:'Communication',
+    present:'skriver', past:'skrev', presPerfect:'har skrevet', pastPerfect:'havde skrevet',
+    future:'vil skrive', conditional:'ville skrive', futPerfect:'vil have skrevet',
+    passive:'skrives', imperative:'skriv',
+  },
+  {
+    english:'to ask', danish:'at spørge', category:'Communication',
+    present:'spørger', past:'spurgte', presPerfect:'har spurgt', pastPerfect:'havde spurgt',
+    future:'vil spørge', conditional:'ville spørge', futPerfect:'vil have spurgt',
+    passive:'spørges', imperative:'spørg',
+  },
+  {
+    english:'to answer', danish:'at svare', category:'Communication',
+    present:'svarer', past:'svarede', presPerfect:'har svaret', pastPerfect:'havde svaret',
+    future:'vil svare', conditional:'ville svare', futPerfect:'vil have svaret',
+    passive:'svares', imperative:'svar',
+  },
+  {
+    english:'to understand', danish:'at forstå', category:'Communication',
+    present:'forstår', past:'forstod', presPerfect:'har forstået', pastPerfect:'havde forstået',
+    future:'vil forstå', conditional:'ville forstå', futPerfect:'vil have forstået',
+    passive:'forstås', imperative:'forstå',
+  },
+  // ── Daily life ──
+  {
+    english:'to eat', danish:'at spise', category:'Daily life',
+    present:'spiser', past:'spiste', presPerfect:'har spist', pastPerfect:'havde spist',
+    future:'vil spise', conditional:'ville spise', futPerfect:'vil have spist',
+    passive:'spises', imperative:'spis',
+  },
+  {
+    english:'to drink', danish:'at drikke', category:'Daily life',
+    present:'drikker', past:'drak', presPerfect:'har drukket', pastPerfect:'havde drukket',
+    future:'vil drikke', conditional:'ville drikke', futPerfect:'vil have drukket',
+    passive:'drikkes', imperative:'drik',
+  },
+  {
+    english:'to sleep', danish:'at sove', category:'Daily life',
+    present:'sover', past:'sov', presPerfect:'har sovet', pastPerfect:'havde sovet',
+    future:'vil sove', conditional:'ville sove', futPerfect:'vil have sovet',
+    passive:'—', imperative:'sov',
+  },
+  {
+    english:'to work', danish:'at arbejde', category:'Daily life',
+    present:'arbejder', past:'arbejdede', presPerfect:'har arbejdet', pastPerfect:'havde arbejdet',
+    future:'vil arbejde', conditional:'ville arbejde', futPerfect:'vil have arbejdet',
+    passive:'arbejdes', imperative:'arbejd',
+  },
+  {
+    english:'to buy', danish:'at købe', category:'Daily life',
+    present:'køber', past:'købte', presPerfect:'har købt', pastPerfect:'havde købt',
+    future:'vil købe', conditional:'ville købe', futPerfect:'vil have købt',
+    passive:'købes', imperative:'køb',
+  },
+  {
+    english:'to help', danish:'at hjælpe', category:'Daily life',
+    present:'hjælper', past:'hjalp', presPerfect:'har hjulpet', pastPerfect:'havde hjulpet',
+    future:'vil hjælpe', conditional:'ville hjælpe', futPerfect:'vil have hjulpet',
+    passive:'hjælpes', imperative:'hjælp',
+  },
+  {
+    english:'to think', danish:'at tænke', category:'Daily life',
+    present:'tænker', past:'tænkte', presPerfect:'har tænkt', pastPerfect:'havde tænkt',
+    future:'vil tænke', conditional:'ville tænke', futPerfect:'vil have tænkt',
+    passive:'tænkes', imperative:'tænk',
+  },
+  {
+    english:'to feel', danish:'at føle', category:'Daily life',
+    present:'føler', past:'følte', presPerfect:'har følt', pastPerfect:'havde følt',
+    future:'vil føle', conditional:'ville føle', futPerfect:'vil have følt',
+    passive:'føles', imperative:'føl',
+  },
+  {
+    english:'to see', danish:'at se', category:'Daily life',
+    present:'ser', past:'så', presPerfect:'har set', pastPerfect:'havde set',
+    future:'vil se', conditional:'ville se', futPerfect:'vil have set',
+    passive:'ses', imperative:'se',
+  },
+  {
+    english:'to find', danish:'at finde', category:'Daily life',
+    present:'finder', past:'fandt', presPerfect:'har fundet', pastPerfect:'havde fundet',
+    future:'vil finde', conditional:'ville finde', futPerfect:'vil have fundet',
+    passive:'findes', imperative:'find',
+  },
+  {
+    english:'to give', danish:'at give', category:'Daily life',
+    present:'giver', past:'gav', presPerfect:'har givet', pastPerfect:'havde givet',
+    future:'vil give', conditional:'ville give', futPerfect:'vil have givet',
+    passive:'gives', imperative:'giv',
+  },
+  {
+    english:'to take', danish:'at tage', category:'Daily life',
+    present:'tager', past:'tog', presPerfect:'har taget', pastPerfect:'havde taget',
+    future:'vil tage', conditional:'ville tage', futPerfect:'vil have taget',
+    passive:'tages', imperative:'tag',
+  },
+  {
+    english:'to open', danish:'at åbne', category:'Daily life',
+    present:'åbner', past:'åbnede', presPerfect:'har åbnet', pastPerfect:'havde åbnet',
+    future:'vil åbne', conditional:'ville åbne', futPerfect:'vil have åbnet',
+    passive:'åbnes', imperative:'åbn',
+  },
+  {
+    english:'to close', danish:'at lukke', category:'Daily life',
+    present:'lukker', past:'lukkede', presPerfect:'har lukket', pastPerfect:'havde lukket',
+    future:'vil lukke', conditional:'ville lukke', futPerfect:'vil have lukket',
+    passive:'lukkes', imperative:'luk',
+  },
+  {
+    english:'to pay', danish:'at betale', category:'Daily life',
+    present:'betaler', past:'betalte', presPerfect:'har betalt', pastPerfect:'havde betalt',
+    future:'vil betale', conditional:'ville betale', futPerfect:'vil have betalt',
+    passive:'betales', imperative:'betal',
+  },
+];
+
+// ═══════════════════════════════════════════════
+// ANIMALS
+// Fields: english, danish, gender (en/et), plural,
+//         male, female, young, group
+// gender: 'en' = common (fælleskon), 'et' = neuter (intetkøn)
+// ═══════════════════════════════════════════════
+const ANIMALS = [
+  // ── Farm ──
+  { english:'cow',      danish:'ko',        gender:'en', plural:'køer',      male:'tyr',       female:'ko',       young:'kalv',     group:'Farm' },
+  { english:'bull',     danish:'tyr',       gender:'en', plural:'tyre',      male:'tyr',       female:'ko',       young:'kalv',     group:'Farm' },
+  { english:'calf',     danish:'kalv',      gender:'en', plural:'kalve',     male:'tyrekalv',  female:'kvieka',   young:'—',        group:'Farm' },
+  { english:'sheep',    danish:'får',       gender:'et', plural:'får',       male:'vædder',    female:'søjte',    young:'lam',      group:'Farm' },
+  { english:'ram',      danish:'vædder',    gender:'en', plural:'væddere',   male:'vædder',    female:'søjte',    young:'lam',      group:'Farm' },
+  { english:'lamb',     danish:'lam',       gender:'et', plural:'lam',       male:'—',         female:'—',        young:'—',        group:'Farm' },
+  { english:'pig',      danish:'gris',      gender:'en', plural:'grise',     male:'orne',      female:'so',       young:'pattegris',group:'Farm' },
+  { english:'boar',     danish:'orne',      gender:'en', plural:'orner',     male:'orne',      female:'so',       young:'pattegris',group:'Farm' },
+  { english:'sow',      danish:'so',        gender:'en', plural:'søer',      male:'orne',      female:'so',       young:'pattegris',group:'Farm' },
+  { english:'horse',    danish:'hest',      gender:'en', plural:'heste',     male:'hingst',    female:'hoppe',    young:'føl',      group:'Farm' },
+  { english:'stallion', danish:'hingst',    gender:'en', plural:'hingste',   male:'hingst',    female:'hoppe',    young:'føl',      group:'Farm' },
+  { english:'mare',     danish:'hoppe',     gender:'en', plural:'hopper',    male:'hingst',    female:'hoppe',    young:'føl',      group:'Farm' },
+  { english:'foal',     danish:'føl',       gender:'et', plural:'føl',       male:'—',         female:'—',        young:'—',        group:'Farm' },
+  { english:'goat',     danish:'ged',       gender:'en', plural:'geder',     male:'buk',       female:'ged',      young:'killing',  group:'Farm' },
+  { english:'billy goat',danish:'buk',      gender:'en', plural:'bukke',     male:'buk',       female:'ged',      young:'killing',  group:'Farm' },
+  { english:'kid (goat)',danish:'killing',   gender:'en', plural:'killinger', male:'—',         female:'—',        young:'—',        group:'Farm' },
+  { english:'chicken',  danish:'høne',      gender:'en', plural:'høns',      male:'hane',      female:'høne',     young:'kylling',  group:'Farm' },
+  { english:'rooster',  danish:'hane',      gender:'en', plural:'haner',     male:'hane',      female:'høne',     young:'kylling',  group:'Farm' },
+  { english:'chick',    danish:'kylling',   gender:'en', plural:'kyllinger', male:'—',         female:'—',        young:'—',        group:'Farm' },
+  { english:'duck',     danish:'and',       gender:'en', plural:'ænder',     male:'andrik',    female:'and',      young:'ælling',   group:'Farm' },
+  { english:'drake',    danish:'andrik',    gender:'en', plural:'andriker',  male:'andrik',    female:'and',      young:'ælling',   group:'Farm' },
+  { english:'duckling', danish:'ælling',    gender:'en', plural:'ællinger',  male:'—',         female:'—',        young:'—',        group:'Farm' },
+  { english:'goose',    danish:'gås',       gender:'en', plural:'gæs',       male:'gaserik',   female:'gås',      young:'gæsling',  group:'Farm' },
+  { english:'turkey',   danish:'kalkun',    gender:'en', plural:'kalkuner',  male:'kalkun',    female:'kalkun',   young:'kalkunkylling', group:'Farm' },
+  { english:'rabbit',   danish:'kanin',     gender:'en', plural:'kaniner',   male:'han-kanin', female:'hun-kanin',young:'unge',     group:'Farm' },
+  { english:'donkey',   danish:'æsel',      gender:'et', plural:'æsler',     male:'hanæsel',   female:'hunæsel',  young:'æselføl',  group:'Farm' },
+  { english:'cat',      danish:'kat',       gender:'en', plural:'katte',     male:'han-kat',   female:'hun-kat',  young:'killing',  group:'Farm' },
+  { english:'dog',      danish:'hund',      gender:'en', plural:'hunde',     male:'han-hund',  female:'tæve',     young:'hvalp',    group:'Farm' },
+  // ── Pets ──
+  { english:'hamster',  danish:'hamster',   gender:'en', plural:'hamstere',  male:'—',         female:'—',        young:'unge',     group:'Pets' },
+  { english:'guinea pig',danish:'marsvin',  gender:'et', plural:'marsvin',   male:'—',         female:'—',        young:'unge',     group:'Pets' },
+  { english:'goldfish', danish:'guldfisk',  gender:'en', plural:'guldfisk',  male:'—',         female:'—',        young:'—',        group:'Pets' },
+  { english:'budgerigar',danish:'undulat',  gender:'en', plural:'undulater', male:'—',         female:'—',        young:'—',        group:'Pets' },
+  { english:'parrot',   danish:'papegøje',  gender:'en', plural:'papegøjer', male:'—',         female:'—',        young:'—',        group:'Pets' },
+  { english:'turtle',   danish:'skildpadde',gender:'en', plural:'skildpadder',male:'—',        female:'—',        young:'—',        group:'Pets' },
+  { english:'snake',    danish:'slange',    gender:'en', plural:'slanger',   male:'—',         female:'—',        young:'—',        group:'Pets' },
+  // ── Zoo ──
+  { english:'lion',     danish:'løve',      gender:'en', plural:'løver',     male:'løve',      female:'løvinde',  young:'løveunge', group:'Zoo' },
+  { english:'tiger',    danish:'tiger',     gender:'en', plural:'tigre',     male:'tiger',     female:'tigerinde',young:'tigerunge',group:'Zoo' },
+  { english:'elephant', danish:'elefant',   gender:'en', plural:'elefanter', male:'elefanttyr',female:'elefantko',young:'elefantkalv',group:'Zoo' },
+  { english:'giraffe',  danish:'giraf',     gender:'en', plural:'giraffer',  male:'—',         female:'—',        young:'girafunge',group:'Zoo' },
+  { english:'zebra',    danish:'zebra',     gender:'en', plural:'zebraer',   male:'—',         female:'—',        young:'zebraføl', group:'Zoo' },
+  { english:'gorilla',  danish:'gorilla',   gender:'en', plural:'goriller',  male:'—',         female:'—',        young:'—',        group:'Zoo' },
+  { english:'bear',     danish:'bjørn',     gender:'en', plural:'bjørne',    male:'bjørn',     female:'bjørnehun',young:'bjørneunge',group:'Zoo' },
+  { english:'wolf',     danish:'ulv',       gender:'en', plural:'ulve',      male:'ulv',       female:'ulvinde',  young:'ulveunge', group:'Zoo' },
+  { english:'fox',      danish:'ræv',       gender:'en', plural:'ræve',      male:'ræv',       female:'rævehan',  young:'rævehvalp',group:'Zoo' },
+  { english:'deer',     danish:'hjort',     gender:'en', plural:'hjorte',    male:'hjort',     female:'hind',     young:'kalv',     group:'Zoo' },
+  { english:'penguin',  danish:'pingvin',   gender:'en', plural:'pingviner', male:'—',         female:'—',        young:'—',        group:'Zoo' },
+  { english:'crocodile',danish:'krokodille',gender:'en', plural:'krokodiller',male:'—',        female:'—',        young:'—',        group:'Zoo' },
+  { english:'hippopotamus',danish:'flodhest',gender:'en',plural:'flodheste', male:'—',         female:'—',        young:'—',        group:'Zoo' },
+  { english:'rhinoceros',danish:'næsehorn', gender:'et', plural:'næsehorn',  male:'—',         female:'—',        young:'—',        group:'Zoo' },
+  { english:'monkey',   danish:'abe',       gender:'en', plural:'aber',      male:'—',         female:'—',        young:'abeunge',  group:'Zoo' },
+  { english:'flamingo', danish:'flamingo',  gender:'en', plural:'flamingoer',male:'—',         female:'—',        young:'—',        group:'Zoo' },
+  // ── Insects ──
+  { english:'bee',      danish:'bi',        gender:'en', plural:'bier',      male:'dronebi',   female:'arbejderbi',young:'larve',   group:'Insects' },
+  { english:'butterfly',danish:'sommerfugl',gender:'en', plural:'sommerfugle',male:'—',        female:'—',        young:'larve',    group:'Insects' },
+  { english:'ant',      danish:'myre',      gender:'en', plural:'myrer',     male:'—',         female:'—',        young:'larve',    group:'Insects' },
+  { english:'fly',      danish:'flue',      gender:'en', plural:'fluer',     male:'—',         female:'—',        young:'larve',    group:'Insects' },
+  { english:'mosquito', danish:'myg',       gender:'en', plural:'myg',       male:'—',         female:'—',        young:'larve',    group:'Insects' },
+  { english:'beetle',   danish:'bille',     gender:'en', plural:'biller',    male:'—',         female:'—',        young:'larve',    group:'Insects' },
+  { english:'spider',   danish:'edderkop',  gender:'en', plural:'edderkopper',male:'—',        female:'—',        young:'—',        group:'Insects' },
+  { english:'worm',     danish:'orm',       gender:'en', plural:'orme',      male:'—',         female:'—',        young:'—',        group:'Insects' },
+  { english:'ladybird', danish:'mariehøne', gender:'en', plural:'mariehøns', male:'—',         female:'—',        young:'—',        group:'Insects' },
+  { english:'grasshopper',danish:'græshoppe',gender:'en',plural:'græshopper',male:'—',        female:'—',        young:'—',        group:'Insects' },
+];
+
+// ═══════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; }
+  return a;
 }
+function unique(arr){ return [...new Set(arr)]; }
+function dash(v){ return (!v||v==='—')?'<span style="color:var(--border)">—</span>':v; }
 
-function saveWords() {
-  localStorage.setItem('dansk_words', JSON.stringify(words));
-}
-
-// =====================================================
-// VIEWS
-// =====================================================
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  event.target.classList.add('active');
-  if (name === 'quiz') renderQuiz();
-  if (name === 'reference') renderReference();
-  if (name === 'manage') renderManage();
-}
-
-// =====================================================
-// QUIZ
-// =====================================================
-function getCategories() {
-  const cats = [...new Set(words.map(w => w.category).filter(Boolean))];
-  return cats.sort();
-}
-
-function buildQuizFilters() {
-  const cats = getCategories();
-  const row = document.getElementById('quiz-filters');
-  const current = quizFilter;
-  row.innerHTML = '<button class="filter-btn' + (current==='all'?' active':'') + '" onclick="setFilter(\'all\', this)">All</button>';
-  cats.forEach(c => {
-    const active = current === c ? ' active' : '';
-    row.innerHTML += `<button class="filter-btn${active}" onclick="setFilter('${c}', this)">${c}</button>`;
-  });
-}
-
-function setFilter(cat, btn) {
-  quizFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+// ═══════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════
+function showView(name,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
   btn.classList.add('active');
-  startQueue();
+  ({translate:initTranslate, conjugation:initConj, animals:initAnimals, reference:initRef})[name]();
 }
 
-function startQueue() {
-  let pool = quizFilter === 'all' ? [...words] : words.filter(w => w.category === quizFilter);
-  // shuffle
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  quizQueue = pool;
-  quizIndex = 0;
-  revealed = false;
-  renderCard();
-}
+// ═══════════════════════════════════════════════
+// TRANSLATE
+// ═══════════════════════════════════════════════
+let trQueue=[], trIdx=0, trFilter='all', trRevealed=false;
 
-function renderQuiz() {
-  buildQuizFilters();
-  startQueue();
+function initTranslate(){
+  const cats = unique(VERBS.map(v=>v.category));
+  const row = document.getElementById('tr-cat-filters');
+  row.innerHTML=`<button class="filter-btn${trFilter==='all'?' active':''}" onclick="setTrFilter('all',this)">All</button>`;
+  cats.forEach(c=>{ row.innerHTML+=`<button class="filter-btn${trFilter===c?' active':''}" onclick="setTrFilter('${c}',this)">${c}</button>`; });
+  startTrQueue();
 }
-
-function renderCard() {
-  const area = document.getElementById('quiz-card-area');
-  if (!quizQueue.length) {
-    area.innerHTML = '<div class="quiz-empty">No words found. Add some in Manage Words.</div>';
-    return;
-  }
-  const word = quizQueue[quizIndex];
-  revealed = false;
-  area.innerHTML = `
+function setTrFilter(cat,btn){
+  trFilter=cat;
+  document.querySelectorAll('#tr-cat-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  startTrQueue();
+}
+function startTrQueue(){
+  const pool=trFilter==='all'?VERBS:VERBS.filter(v=>v.category===trFilter);
+  trQueue=shuffle(pool); trIdx=0; trRevealed=false; renderTrCard();
+}
+function renderTrCard(){
+  const area=document.getElementById('tr-card');
+  if(!trQueue.length){ area.innerHTML='<div class="empty-msg">No verbs found.</div>'; return; }
+  const w=trQueue[trIdx]; trRevealed=false;
+  area.innerHTML=`
     <div class="card">
-      <div class="card-category">${word.category || ''}</div>
-      <div class="card-counter">${quizIndex + 1} / ${quizQueue.length}</div>
+      <div class="card-meta"><span>${w.category}</span><span>${trIdx+1} / ${trQueue.length}</span></div>
       <div class="card-prompt-label">Translate to Danish</div>
-      <div class="card-english">${word.english}</div>
-      <div class="answer-area">
-        <input class="answer-input" id="answer-input" type="text" placeholder="type your answer…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="handleKey(event)">
-        <div class="feedback-msg" id="feedback"></div>
-        <div class="reveal-box" id="reveal-box">
-          <div class="reveal-danish">${word.danish}</div>
-          ${word.present || word.past ? `<div class="reveal-forms">
-            ${word.present ? `present: <span>${word.present}</span>` : ''}
-            ${word.present && word.past ? ' &nbsp;·&nbsp; ' : ''}
-            ${word.past ? `past: <span>${word.past}</span>` : ''}
-          </div>` : ''}
+      <div class="card-main">${w.english}</div>
+      <div>
+        <input class="answer-input" id="tri" type="text" placeholder="type your answer…"
+          autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="trKey(event)">
+        <div class="feedback-msg" id="trf"></div>
+        <div class="reveal-box" id="trr">
+          <div class="reveal-answer">${w.danish}</div>
+          <div class="reveal-note">
+            present: <strong>${w.present}</strong> &nbsp;·&nbsp;
+            past: <strong>${w.past}</strong> &nbsp;·&nbsp;
+            pres. perfect: <strong>${w.presPerfect}</strong>
+          </div>
         </div>
       </div>
     </div>
     <div class="card-actions">
-      <button class="btn ghost" onclick="skipCard()">Skip →</button>
-      <button class="btn" onclick="checkAnswer()">Check</button>
-      <button class="btn primary" onclick="nextCard()" id="btn-next" style="display:none;">Next →</button>
+      <button class="btn ghost" onclick="trNext()">Skip →</button>
+      <button class="btn" onclick="trCheck()">Check</button>
+      <button class="btn primary" id="trnb" style="display:none;" onclick="trNext()">Next →</button>
+    </div>`;
+  document.getElementById('tri').focus();
+}
+function trKey(e){ if(e.key==='Enter'){ trRevealed?trNext():trCheck(); } }
+function trCheck(){
+  if(trRevealed) return;
+  const w=trQueue[trIdx], val=document.getElementById('tri').value.trim().toLowerCase();
+  if(!val){ trReveal(null); return; }
+  const acc=[w.danish,w.present,w.past].filter(Boolean).map(s=>s.toLowerCase().replace(/^at /,''));
+  trReveal(acc.includes(val.replace(/^at /,''))||val===w.danish.toLowerCase());
+}
+function trReveal(ok){
+  trRevealed=true;
+  const inp=document.getElementById('tri'),fb=document.getElementById('trf');
+  document.getElementById('trr').classList.add('show');
+  document.getElementById('trnb').style.display='';
+  if(ok===true){ inp.classList.add('correct'); fb.textContent='✓ correct'; fb.className='feedback-msg correct'; }
+  else if(ok===false){ inp.classList.add('wrong'); fb.textContent='✗ not quite — see answer below'; fb.className='feedback-msg wrong'; }
+  else { fb.textContent='Answer revealed'; fb.className='feedback-msg'; }
+}
+function trNext(){ trIdx=(trIdx+1)%trQueue.length; renderTrCard(); }
+
+// ═══════════════════════════════════════════════
+// CONJUGATION
+// ═══════════════════════════════════════════════
+let cjQueue=[], cjIdx=0, cjVerb='all', cjTense='all', cjRevealed=false;
+
+function initConj(){
+  // verb filter
+  const vrow=document.getElementById('cj-verb-filters');
+  vrow.innerHTML=`<button class="filter-btn${cjVerb==='all'?' active':''}" onclick="setCjVerb('all',this)">All verbs</button>`;
+  VERBS.forEach(v=>{
+    const esc=v.danish.replace(/'/g,"\\'");
+    vrow.innerHTML+=`<button class="filter-btn${cjVerb===v.danish?' active':''}" onclick="setCjVerb('${esc}',this)">${v.danish}</button>`;
+  });
+  // tense filter
+  const trow=document.getElementById('cj-tense-filters');
+  trow.innerHTML=`<button class="filter-btn${cjTense==='all'?' active':''}" onclick="setCjTense('all',this)">All tenses</button>`;
+  TENSES.forEach(t=>{
+    trow.innerHTML+=`<button class="filter-btn${cjTense===t.key?' active':''}" onclick="setCjTense('${t.key}',this)">${t.label}</button>`;
+  });
+  startCjQueue();
+}
+function setCjVerb(verb,btn){
+  cjVerb=verb;
+  document.querySelectorAll('#cj-verb-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); startCjQueue();
+}
+function setCjTense(tense,btn){
+  cjTense=tense;
+  document.querySelectorAll('#cj-tense-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); startCjQueue();
+}
+function startCjQueue(){
+  const pool=cjVerb==='all'?VERBS:VERBS.filter(v=>v.danish===cjVerb);
+  const tenses=cjTense==='all'?TENSES.map(t=>t.key):[cjTense];
+  const drills=[];
+  pool.forEach(v=>{
+    tenses.forEach(tk=>{
+      const form=v[tk]; if(!form||form==='—') return;
+      PRONOUNS.forEach(pro=>drills.push({verb:v,tense:tk,pronoun:pro,answer:form}));
+    });
+  });
+  cjQueue=shuffle(drills); cjIdx=0; cjRevealed=false; renderCjCard();
+}
+function renderCjCard(){
+  const area=document.getElementById('cj-card');
+  if(!cjQueue.length){ area.innerHTML='<div class="empty-msg">No conjugations for this selection.<br>Some tenses (e.g. Imperative) don\'t apply to modal verbs.</div>'; return; }
+  const d=cjQueue[cjIdx], v=d.verb; cjRevealed=false;
+  const tLabel=TENSES.find(t=>t.key===d.tense)?.label||d.tense;
+  const tNote=TENSES.find(t=>t.key===d.tense)?.note||'';
+  // mini table: all pronouns for this tense
+  const tableRows=PRONOUNS.map(p=>`
+    <tr class="${p.da===d.pronoun.da?'hl':''}">
+      <td>${p.da}</td><td>${v[d.tense]||'—'}</td>
+    </tr>`).join('');
+  area.innerHTML=`
+    <div class="card">
+      <div class="card-meta"><span>${tLabel}</span><span>${cjIdx+1} / ${cjQueue.length}</span></div>
+      <div class="card-prompt-label">${v.english} &nbsp;·&nbsp; ${v.danish}</div>
+      <div class="pronoun-block">
+        <div class="pronoun-badge">${d.pronoun.da}</div>
+        <div class="pronoun-en">${d.pronoun.en}</div>
+      </div>
+      <div>
+        <input class="answer-input" id="cji" type="text"
+          placeholder="${d.pronoun.da} …"
+          autocomplete="off" autocorrect="off" spellcheck="false"
+          onkeydown="cjKey(event)">
+        <div class="feedback-msg" id="cjf"></div>
+        <div class="reveal-box" id="cjr">
+          <div class="reveal-answer">${d.pronoun.da} ${d.answer}</div>
+          <div class="reveal-note">
+            ${tLabel} — same form for all pronouns
+            ${tNote?'<br><span style="color:var(--border)">e.g. '+tNote+'</span>':''}
+          </div>
+          <table class="conj-mini">${tableRows}</table>
+        </div>
+      </div>
     </div>
-  `;
-  document.getElementById('answer-input').focus();
+    <div class="card-actions">
+      <button class="btn ghost" onclick="cjNext()">Skip →</button>
+      <button class="btn" onclick="cjCheck()">Check</button>
+      <button class="btn primary" id="cjnb" style="display:none;" onclick="cjNext()">Next →</button>
+    </div>`;
+  document.getElementById('cji').focus();
+}
+function cjKey(e){ if(e.key==='Enter'){ cjRevealed?cjNext():cjCheck(); } }
+function cjCheck(){
+  if(cjRevealed) return;
+  const d=cjQueue[cjIdx], val=document.getElementById('cji').value.trim().toLowerCase();
+  if(!val){ cjReveal(null); return; }
+  const ans=d.answer.toLowerCase();
+  const stripped=val.replace(/^(jeg|du|han\/hun|han|hun|den\/det|den|det|vi|i|de)\s+/,'');
+  cjReveal(val===ans||stripped===ans);
+}
+function cjReveal(ok){
+  cjRevealed=true;
+  const inp=document.getElementById('cji'),fb=document.getElementById('cjf');
+  document.getElementById('cjr').classList.add('show');
+  document.getElementById('cjnb').style.display='';
+  if(ok===true){ inp.classList.add('correct'); fb.textContent='✓ correct'; fb.className='feedback-msg correct'; }
+  else if(ok===false){ inp.classList.add('wrong'); fb.textContent='✗ not quite — see answer below'; fb.className='feedback-msg wrong'; }
+  else { fb.textContent='Answer revealed'; fb.className='feedback-msg'; }
+}
+function cjNext(){ cjIdx=(cjIdx+1)%cjQueue.length; renderCjCard(); }
+
+// ═══════════════════════════════════════════════
+// ANIMALS
+// ═══════════════════════════════════════════════
+let anQueue=[], anIdx=0, anGroup='all', anMode='en-da', anRevealed=false;
+
+function initAnimals(){
+  const groups=unique(ANIMALS.map(a=>a.group));
+  const row=document.getElementById('an-group-filters');
+  row.innerHTML=`<button class="filter-btn${anGroup==='all'?' active':''}" onclick="setAnGroup('all',this)">All</button>`;
+  groups.forEach(g=>{ row.innerHTML+=`<button class="filter-btn${anGroup===g?' active':''}" onclick="setAnGroup('${g}',this)">${g}</button>`; });
+  startAnQueue();
+}
+function setAnGroup(g,btn){
+  anGroup=g;
+  document.querySelectorAll('#an-group-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); startAnQueue();
+}
+function setAnimalMode(mode,btn){
+  anMode=mode;
+  document.querySelectorAll('#an-mode-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); startAnQueue();
+}
+function startAnQueue(){
+  const pool=anGroup==='all'?ANIMALS:ANIMALS.filter(a=>a.group===anGroup);
+  anQueue=shuffle(pool); anIdx=0; anRevealed=false; renderAnCard();
 }
 
-function handleKey(e) {
-  if (e.key === 'Enter') {
-    if (revealed) nextCard();
-    else checkAnswer();
-  }
+function hasExtraForms(a){
+  return [a.male,a.female,a.young].some(v=>v&&v!=='—');
 }
 
-function checkAnswer() {
-  if (revealed) return;
-  const word = quizQueue[quizIndex];
-  const input = document.getElementById('answer-input');
-  const val = input.value.trim().toLowerCase();
-  if (!val) {
-    revealAnswer(null);
-    return;
-  }
-  // Accept the base danish form or the present/past variants
-  const acceptList = [word.danish, word.present, word.past]
-    .filter(Boolean)
-    .map(s => s.toLowerCase().replace(/^at /, ''));
-  const clean = val.replace(/^at /, '');
-  const isCorrect = acceptList.includes(clean) || val === word.danish.toLowerCase();
-  revealAnswer(isCorrect);
-}
+function renderAnCard(){
+  const area=document.getElementById('an-card');
+  if(!anQueue.length){ area.innerHTML='<div class="empty-msg">No animals found.</div>'; return; }
+  const a=anQueue[anIdx]; anRevealed=false;
+  const prompt = anMode==='en-da' ? a.english : a.danish;
+  const answer = anMode==='en-da' ? a.danish  : a.english;
+  const genderBadge = `<span class="gender-tag gender-${a.gender}">${a.gender}-word</span>`;
 
-function revealAnswer(correct) {
-  revealed = true;
-  const input = document.getElementById('answer-input');
-  const fb = document.getElementById('feedback');
-  const box = document.getElementById('reveal-box');
-  const nextBtn = document.getElementById('btn-next');
-  box.classList.add('show');
-  if (nextBtn) nextBtn.style.display = '';
-  if (correct === true) {
-    input.classList.add('correct');
-    fb.textContent = '✓ correct';
-    fb.className = 'feedback-msg correct';
-  } else if (correct === false) {
-    input.classList.add('wrong');
-    fb.textContent = '✗ not quite — see the answer below';
-    fb.className = 'feedback-msg wrong';
-  } else {
-    fb.textContent = 'Answer revealed';
-    fb.className = 'feedback-msg';
-  }
-}
+  // forms for reveal
+  const formsHtml = hasExtraForms(a) ? `
+    <div style="margin-top:10px;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Forms</div>
+    <div class="forms-grid">
+      <div><div class="form-cell-label">Male</div><div class="form-cell-val">${a.male!=='—'?a.male:'—'}</div></div>
+      <div><div class="form-cell-label">Female</div><div class="form-cell-val">${a.female!=='—'?a.female:'—'}</div></div>
+      <div><div class="form-cell-label">Young</div><div class="form-cell-val">${a.young!=='—'?a.young:'—'}</div></div>
+    </div>` : '';
 
-function nextCard() {
-  quizIndex = (quizIndex + 1) % quizQueue.length;
-  renderCard();
+  area.innerHTML=`
+    <div class="card">
+      <div class="card-meta"><span>${a.group}</span><span>${anIdx+1} / ${anQueue.length}</span></div>
+      <div class="card-prompt-label">${anMode==='en-da'?'Translate to Danish':'Translate to English'}</div>
+      <div class="card-main">${prompt}</div>
+      <div>
+        <input class="answer-input" id="ani" type="text" placeholder="your answer…"
+          autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="anKey(event)">
+        <div class="feedback-msg" id="anf"></div>
+        <div class="reveal-box" id="anr">
+          <div class="reveal-answer">${answer} ${anMode==='en-da'?genderBadge:''}</div>
+          <div class="reveal-note">
+            ${anMode==='en-da'?`plural: <strong>${a.plural}</strong>`:`Danish: <strong>${a.danish}</strong> · plural: <strong>${a.plural}</strong>`}
+          </div>
+          ${formsHtml}
+        </div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn ghost" onclick="anNext()">Skip →</button>
+      <button class="btn" onclick="anCheck()">Check</button>
+      <button class="btn primary" id="annb" style="display:none;" onclick="anNext()">Next →</button>
+    </div>`;
+  document.getElementById('ani').focus();
 }
-
-function skipCard() {
-  nextCard();
+function anKey(e){ if(e.key==='Enter'){ anRevealed?anNext():anCheck(); } }
+function anCheck(){
+  if(anRevealed) return;
+  const a=anQueue[anIdx], val=document.getElementById('ani').value.trim().toLowerCase();
+  if(!val){ anReveal(null); return; }
+  const target=(anMode==='en-da'?a.danish:a.english).toLowerCase();
+  // also accept without article prefix
+  anReveal(val===target||val===target.replace(/^(en|et) /,''));
 }
+function anReveal(ok){
+  anRevealed=true;
+  const inp=document.getElementById('ani'),fb=document.getElementById('anf');
+  document.getElementById('anr').classList.add('show');
+  document.getElementById('annb').style.display='';
+  if(ok===true){ inp.classList.add('correct'); fb.textContent='✓ correct'; fb.className='feedback-msg correct'; }
+  else if(ok===false){ inp.classList.add('wrong'); fb.textContent='✗ not quite — see answer below'; fb.className='feedback-msg wrong'; }
+  else { fb.textContent='Answer revealed'; fb.className='feedback-msg'; }
+}
+function anNext(){ anIdx=(anIdx+1)%anQueue.length; renderAnCard(); }
 
-// =====================================================
+// ═══════════════════════════════════════════════
 // REFERENCE
-// =====================================================
-function renderReference(search = '', catFilter = null) {
-  if (catFilter === null) {
-    catFilter = document.getElementById('ref-cat-filter')?.value || 'all';
+// ═══════════════════════════════════════════════
+let refType='verbs';
+
+function initRef(){
+  renderVerbRef();
+  populateAnimalRefDropdown();
+}
+function setRefType(type,btn){
+  refType=type;
+  document.querySelectorAll('#ref-type-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ref-verbs-section').style.display=type==='verbs'?'':'none';
+  document.getElementById('ref-animals-section').style.display=type==='animals'?'':'none';
+  if(type==='verbs') renderVerbRef();
+  else renderAnimalRef();
+}
+
+function renderVerbRef(){
+  // populate cat dropdown once
+  const sel=document.getElementById('ref-verb-cat');
+  if(sel.options.length===1){
+    unique(VERBS.map(v=>v.category)).sort().forEach(c=>sel.innerHTML+=`<option value="${c}">${c}</option>`);
   }
-
-  // Populate category dropdown
-  const sel = document.getElementById('ref-cat-filter');
-  const cats = getCategories();
-  const currentCat = sel.value;
-  sel.innerHTML = '<option value="all">All categories</option>';
-  cats.forEach(c => {
-    sel.innerHTML += `<option value="${c}" ${c===currentCat?'selected':''}>${c}</option>`;
+  const q=(document.getElementById('ref-verb-search')?.value||'').toLowerCase();
+  const cat=sel.value;
+  const filtered=VERBS.filter(v=>{
+    const mc=cat==='all'||v.category===cat;
+    const ms=!q||Object.values(v).some(s=>typeof s==='string'&&s.toLowerCase().includes(q));
+    return mc&&ms;
   });
-  if (catFilter) sel.value = catFilter;
-
-  const q = search.toLowerCase();
-  const filtered = words.filter(w => {
-    const matchSearch = !q || w.english.toLowerCase().includes(q) || w.danish.toLowerCase().includes(q)
-      || (w.present||'').toLowerCase().includes(q) || (w.past||'').toLowerCase().includes(q);
-    const matchCat = catFilter === 'all' || w.category === catFilter;
-    return matchSearch && matchCat;
-  });
-
-  const tbody = document.getElementById('ref-body');
-  tbody.innerHTML = filtered.length ? filtered.map(w => `
-    <tr>
-      <td class="cell-english">${w.english}</td>
-      <td class="cell-danish">${w.danish}</td>
-      <td>${w.present || '<span style="color:var(--border)">—</span>'}</td>
-      <td>${w.past || '<span style="color:var(--border)">—</span>'}</td>
-      <td><span class="tag">${w.category || ''}</span></td>
-    </tr>
-  `).join('') : '<tr><td colspan="5" style="color:var(--muted);padding:20px 14px;font-size:0.78rem;">No words found.</td></tr>';
+  document.getElementById('ref-verb-body').innerHTML=filtered.map(v=>`<tr>
+    <td class="cell-en">${v.english}</td>
+    <td class="cell-da">${v.danish}</td>
+    <td>${dash(v.present)}</td><td>${dash(v.past)}</td>
+    <td>${dash(v.presPerfect)}</td><td>${dash(v.pastPerfect)}</td>
+    <td>${dash(v.future)}</td><td>${dash(v.conditional)}</td>
+    <td>${dash(v.futPerfect)}</td><td>${dash(v.passive)}</td><td>${dash(v.imperative)}</td>
+    <td><span class="tag">${v.category}</span></td>
+  </tr>`).join('');
 }
 
-// =====================================================
-// MANAGE
-// =====================================================
-function renderManage() {
-  const list = document.getElementById('manage-list');
-  document.getElementById('word-count').textContent = `(${words.length})`;
-  list.innerHTML = words.length ? words.map((w, i) => `
-    <div class="word-item">
-      <span class="word-item-english">${w.english}</span>
-      <span class="word-item-danish">${w.danish}</span>
-      <span class="word-item-cat">${w.category||''}</span>
-      <button class="delete-btn" onclick="deleteWord(${i})" title="Remove">×</button>
-    </div>
-  `).join('') : '<div style="padding:20px;color:var(--muted);font-size:0.75rem;">No words yet.</div>';
-}
-
-function addWord() {
-  const english = document.getElementById('add-english').value.trim();
-  const danish = document.getElementById('add-danish').value.trim();
-  const present = document.getElementById('add-present').value.trim();
-  const past = document.getElementById('add-past').value.trim();
-  const category = document.getElementById('add-category').value.trim() || 'Custom';
-  const status = document.getElementById('add-status');
-
-  if (!english || !danish) {
-    status.textContent = 'English and Danish are required.';
-    status.style.color = 'var(--accent)';
-    return;
+function populateAnimalRefDropdown(){
+  const sel=document.getElementById('ref-animal-group');
+  if(sel.options.length===1){
+    unique(ANIMALS.map(a=>a.group)).forEach(g=>sel.innerHTML+=`<option value="${g}">${g}</option>`);
   }
-
-  words.push({ english, danish, present, past, category });
-  saveWords();
-  renderManage();
-
-  ['add-english','add-danish','add-present','add-past'].forEach(id => document.getElementById(id).value = '');
-  status.textContent = `✓ "${english}" added.`;
-  status.style.color = 'var(--green)';
-  setTimeout(() => status.textContent = '', 2500);
 }
-
-function deleteWord(index) {
-  if (!confirm(`Remove "${words[index].english}"?`)) return;
-  words.splice(index, 1);
-  saveWords();
-  renderManage();
-}
-
-function bulkImport() {
-  const raw = document.getElementById('bulk-paste').value.trim();
-  const status = document.getElementById('bulk-status');
-  if (!raw) return;
-  const lines = raw.split('\n').filter(l => l.trim());
-  let added = 0;
-  lines.forEach(line => {
-    const parts = line.split('|').map(s => s.trim());
-    if (parts.length >= 2 && parts[0] && parts[1]) {
-      words.push({
-        english: parts[0],
-        danish: parts[1],
-        present: parts[2] || '',
-        past: parts[3] || '',
-        category: parts[4] || 'Custom'
-      });
-      added++;
-    }
+function renderAnimalRef(){
+  populateAnimalRefDropdown();
+  const q=(document.getElementById('ref-animal-search')?.value||'').toLowerCase();
+  const grp=document.getElementById('ref-animal-group').value;
+  const filtered=ANIMALS.filter(a=>{
+    const mg=grp==='all'||a.group===grp;
+    const ms=!q||[a.english,a.danish,a.plural,a.male,a.female,a.young].some(s=>(s||'').toLowerCase().includes(q));
+    return mg&&ms;
   });
-  if (added) {
-    saveWords();
-    renderManage();
-    document.getElementById('bulk-paste').value = '';
-    status.textContent = `✓ ${added} word${added>1?'s':''} imported.`;
-    status.style.color = 'var(--green)';
-  } else {
-    status.textContent = 'No valid lines found. Check the format.';
-    status.style.color = 'var(--accent)';
-  }
-  setTimeout(() => status.textContent = '', 3000);
+  document.getElementById('ref-animal-body').innerHTML=filtered.map(a=>`<tr>
+    <td class="cell-en">${a.english}</td>
+    <td class="cell-da">${a.danish}</td>
+    <td><span class="gender-tag gender-${a.gender}">${a.gender}</span></td>
+    <td>${dash(a.plural)}</td>
+    <td>${dash(a.male)}</td><td>${dash(a.female)}</td><td>${dash(a.young)}</td>
+    <td><span class="tag">${a.group}</span></td>
+  </tr>`).join('');
 }
 
-function exportWords() {
-  const json = JSON.stringify(words, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'dansk-words.json'; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importJSON(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) throw new Error();
-      words = imported;
-      saveWords();
-      renderManage();
-      alert(`Imported ${words.length} words.`);
-    } catch {
-      alert('Invalid JSON file.');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-// =====================================================
+// ═══════════════════════════════════════════════
 // INIT
-// =====================================================
-loadWords();
-renderQuiz();
+// ═══════════════════════════════════════════════
+initTranslate();
 </script>
 </body>
 </html>
