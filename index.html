@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dansk — Learn Danish Verbs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0ece3;
+    --paper: #faf8f4;
+    --ink: #1c1814;
+    --muted: #8a8078;
+    --accent: #c94f1e;
+    --accent2: #2c5f8a;
+    --green: #2d7a4f;
+    --border: #d6cfc4;
+    --shadow: rgba(28,24,20,0.08);
+  }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    padding: 24px 40px 18px;
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    letter-spacing: -0.5px;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .tagline {
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+  }
+  .tab {
+    padding: 11px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+  .tab:hover { color: var(--ink); }
+
+  /* MAIN */
+  main { flex: 1; padding: 36px 40px; max-width: 900px; margin: 0 auto; width: 100%; }
+  .view { display: none; animation: fadeIn 0.2s ease; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ============================
+     QUIZ VIEW
+  ============================= */
+  .quiz-wrap { max-width: 560px; margin: 0 auto; }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .filter-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+
+  /* CARD */
+  .card {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 44px 40px 36px;
+    text-align: center;
+    box-shadow: 4px 4px 0 var(--border);
+    position: relative;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .card-category {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card-counter {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  .card-prompt-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card-english {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .answer-area { margin-top: 8px; }
+
+  .answer-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: var(--bg);
+    color: var(--ink);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .answer-input:focus { border-color: var(--accent2); }
+  .answer-input.correct { border-color: var(--green); background: #edf7f2; }
+  .answer-input.wrong { border-color: var(--accent); background: #fef0ec; }
+
+  .reveal-box {
+    display: none;
+    padding: 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+  .reveal-box.show { display: block; }
+  .reveal-danish {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent2);
+    margin-bottom: 4px;
+  }
+  .reveal-forms {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .reveal-forms span { color: var(--ink); }
+
+  .feedback-msg {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    min-height: 18px;
+    margin-top: 6px;
+  }
+  .feedback-msg.correct { color: var(--green); }
+  .feedback-msg.wrong { color: var(--accent); }
+
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 10px 24px;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+  .btn:hover { background: var(--ink); color: #fff; }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn.ghost { border-color: var(--border); color: var(--muted); }
+  .btn.ghost:hover { background: var(--border); color: var(--ink); }
+
+  .quiz-empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 0;
+    font-size: 0.85rem;
+  }
+
+  /* ============================
+     REFERENCE VIEW
+  ============================= */
+  .ref-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-input {
+    flex: 1;
+    min-width: 180px;
+    padding: 9px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--accent2); }
+  .search-input::placeholder { color: var(--muted); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { border-bottom: 2px solid var(--ink); }
+  th {
+    padding: 8px 14px;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 14px;
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover td { background: var(--paper); }
+  .cell-english { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; }
+  .cell-danish { color: var(--accent2); font-weight: 500; }
+  .cell-category {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ============================
+     MANAGE VIEW
+  ============================= */
+  .manage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 620px) { .manage-grid { grid-template-columns: 1fr; } }
+
+  .manage-panel {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+  }
+  .manage-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  .manage-panel p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .form-group { margin-bottom: 12px; }
+  label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  input[type=text], select, textarea {
+    width: 100%;
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type=text]:focus, select:focus, textarea:focus { border-color: var(--accent2); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .word-list-manage {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    margin-top: 16px;
+  }
+  .word-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+  }
+  .word-item:last-child { border-bottom: none; }
+  .word-item-english { flex: 1; font-style: italic; }
+  .word-item-danish { flex: 1; color: var(--accent2); }
+  .word-item-cat { color: var(--muted); font-size: 0.62rem; }
+  .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 2px 4px;
+    transition: color 0.15s;
+  }
+  .delete-btn:hover { color: var(--accent); }
+
+  .status-msg {
+    font-size: 0.7rem;
+    min-height: 16px;
+    margin-top: 8px;
+    color: var(--green);
+  }
+
+  /* IMPORT/EXPORT */
+  .paste-area {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: var(--bg);
+    color: var(--ink);
+    resize: vertical;
+    min-height: 110px;
+    outline: none;
+  }
+  .paste-area:focus { border-color: var(--accent2); }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    header, nav, main { padding-left: 20px; padding-right: 20px; }
+    h1 { font-size: 1.6rem; }
+    .card { padding: 36px 24px 28px; }
+    .card-english { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>D<em>a</em>nsk</h1>
+    <div class="tagline">Danish Verb Practice</div>
+  </div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showView('quiz')">Practice</button>
+  <button class="tab" onclick="showView('reference')">Reference</button>
+  <button class="tab" onclick="showView('manage')">Manage Words</button>
+</nav>
+
+<main>
+
+  <!-- QUIZ VIEW -->
+  <div id="view-quiz" class="view active">
+    <div class="quiz-wrap">
+      <div class="section-label">Practice — English → Danish</div>
+      <div class="filter-row" id="quiz-filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+      </div>
+      <div id="quiz-card-area"></div>
+    </div>
+  </div>
+
+  <!-- REFERENCE VIEW -->
+  <div id="view-reference" class="view">
+    <div class="section-label">Reference — All Words</div>
+    <div class="ref-controls">
+      <input class="search-input" type="text" placeholder="Search English or Danish…" oninput="renderReference(this.value)">
+      <select onchange="renderReference(document.querySelector('.search-input').value, this.value)" id="ref-cat-filter" style="flex:0;width:auto;min-width:140px;">
+        <option value="all">All categories</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>English</th>
+            <th>Danish (infinitive)</th>
+            <th>Present</th>
+            <th>Past</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="ref-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MANAGE VIEW -->
+  <div id="view-manage" class="view">
+    <div class="section-label">Manage word list</div>
+    <div class="manage-grid">
+
+      <div class="manage-panel">
+        <h3>Add a word</h3>
+        <p>Add verbs or phrases one at a time. All fields except English are optional but recommended.</p>
+        <div class="form-group">
+          <label>English</label>
+          <input type="text" id="add-english" placeholder="to be">
+        </div>
+        <div class="form-group">
+          <label>Danish (infinitive / base form)</label>
+          <input type="text" id="add-danish" placeholder="at være">
+        </div>
+        <div class="form-group">
+          <label>Present tense</label>
+          <input type="text" id="add-present" placeholder="er">
+        </div>
+        <div class="form-group">
+          <label>Past tense</label>
+          <input type="text" id="add-past" placeholder="var">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" id="add-category" placeholder="Essential">
+        </div>
+        <button class="btn primary" onclick="addWord()">Add word</button>
+        <div class="status-msg" id="add-status"></div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+        <h3 style="margin-bottom:6px;">Bulk import</h3>
+        <p>Paste lines in this format:<br><code>English | Danish | Present | Past | Category</code><br>Category is optional.</p>
+        <textarea class="paste-area" id="bulk-paste" placeholder="to run | at løbe | løber | løb | Movement&#10;to eat | at spise | spiser | spiste | Food"></textarea>
+        <button class="btn" onclick="bulkImport()" style="margin-top:8px;">Import</button>
+        <div class="status-msg" id="bulk-status"></div>
+      </div>
+
+      <div class="manage-panel">
+        <h3>Word list <span id="word-count" style="color:var(--muted);font-size:0.75rem;font-family:'DM Mono',monospace;"></span></h3>
+        <p>Click × to remove a word. Changes are saved automatically in your browser.</p>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="btn ghost" onclick="exportWords()" style="flex:1;">Export JSON</button>
+          <label class="btn ghost" style="flex:1;text-align:center;cursor:pointer;">
+            Import JSON
+            <input type="file" accept=".json" onchange="importJSON(event)" style="display:none;">
+          </label>
+        </div>
+        <div class="word-list-manage" id="manage-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+// =====================================================
+// DATA — starter pack
+// =====================================================
+const DEFAULTS = [
+  // Essential
+  { english: "to be",        danish: "at være",    present: "er",       past: "var",       category: "Essential" },
+  { english: "to have",      danish: "at have",    present: "har",      past: "havde",     category: "Essential" },
+  { english: "to become",    danish: "at blive",   present: "bliver",   past: "blev",      category: "Essential" },
+  { english: "to do / make", danish: "at gøre",    present: "gør",      past: "gjorde",    category: "Essential" },
+  { english: "to get",       danish: "at få",      present: "får",      past: "fik",       category: "Essential" },
+  { english: "to say",       danish: "at sige",    present: "siger",    past: "sagde",     category: "Essential" },
+  { english: "to know (fact)",danish:"at vide",    present: "ved",      past: "vidste",    category: "Essential" },
+  { english: "to know (person)",danish:"at kende", present: "kender",   past: "kendte",    category: "Essential" },
+  { english: "to want",      danish: "at ville",   present: "vil",      past: "ville",     category: "Essential" },
+  { english: "to can / be able to", danish: "at kunne", present: "kan", past: "kunne",    category: "Essential" },
+  { english: "to must / have to",   danish: "at skulle", present: "skal",past: "skulle",  category: "Essential" },
+  { english: "to may / be allowed", danish: "at måtte",  present: "må",  past: "måtte",   category: "Essential" },
+  // Movement
+  { english: "to go",        danish: "at gå",      present: "går",      past: "gik",       category: "Movement" },
+  { english: "to come",      danish: "at komme",   present: "kommer",   past: "kom",       category: "Movement" },
+  { english: "to run",       danish: "at løbe",    present: "løber",    past: "løb",       category: "Movement" },
+  { english: "to drive",     danish: "at køre",    present: "kører",    past: "kørte",     category: "Movement" },
+  { english: "to travel",    danish: "at rejse",   present: "rejser",   past: "rejste",    category: "Movement" },
+  { english: "to leave",     danish: "at tage afsted", present: "tager afsted", past: "tog afsted", category: "Movement" },
+  // Communication
+  { english: "to speak",     danish: "at tale",    present: "taler",    past: "talte",     category: "Communication" },
+  { english: "to listen",    danish: "at lytte",   present: "lytter",   past: "lyttede",   category: "Communication" },
+  { english: "to read",      danish: "at læse",    present: "læser",    past: "læste",     category: "Communication" },
+  { english: "to write",     danish: "at skrive",  present: "skriver",  past: "skrev",     category: "Communication" },
+  { english: "to ask",       danish: "at spørge",  present: "spørger",  past: "spurgte",   category: "Communication" },
+  { english: "to answer",    danish: "at svare",   present: "svarer",   past: "svarede",   category: "Communication" },
+  { english: "to understand",danish: "at forstå",  present: "forstår",  past: "forstod",   category: "Communication" },
+  // Daily life
+  { english: "to eat",       danish: "at spise",   present: "spiser",   past: "spiste",    category: "Daily life" },
+  { english: "to drink",     danish: "at drikke",  present: "drikker",  past: "drak",      category: "Daily life" },
+  { english: "to sleep",     danish: "at sove",    present: "sover",    past: "sov",       category: "Daily life" },
+  { english: "to work",      danish: "at arbejde", present: "arbejder", past: "arbejdede", category: "Daily life" },
+  { english: "to buy",       danish: "at købe",    present: "køber",    past: "købte",     category: "Daily life" },
+  { english: "to pay",       danish: "at betale",  present: "betaler",  past: "betalte",   category: "Daily life" },
+  { english: "to open",      danish: "at åbne",    present: "åbner",    past: "åbnede",    category: "Daily life" },
+  { english: "to close",     danish: "at lukke",   present: "lukker",   past: "lukkede",   category: "Daily life" },
+  { english: "to help",      danish: "at hjælpe",  present: "hjælper",  past: "hjalp",     category: "Daily life" },
+  { english: "to think",     danish: "at tænke",   present: "tænker",   past: "tænkte",    category: "Daily life" },
+  { english: "to feel",      danish: "at føle",    present: "føler",    past: "følte",     category: "Daily life" },
+  { english: "to see",       danish: "at se",      present: "ser",      past: "så",        category: "Daily life" },
+  { english: "to find",      danish: "at finde",   present: "finder",   past: "fandt",     category: "Daily life" },
+  { english: "to give",      danish: "at give",    present: "giver",    past: "gav",       category: "Daily life" },
+  { english: "to take",      danish: "at tage",    present: "tager",    past: "tog",       category: "Daily life" },
+];
+
+// =====================================================
+// STATE
+// =====================================================
+let words = [];
+let quizQueue = [];
+let quizIndex = 0;
+let quizFilter = 'all';
+let revealed = false;
+
+function loadWords() {
+  try {
+    const saved = localStorage.getItem('dansk_words');
+    words = saved ? JSON.parse(saved) : [...DEFAULTS];
+  } catch(e) {
+    words = [...DEFAULTS];
+  }
+}
+
+function saveWords() {
+  localStorage.setItem('dansk_words', JSON.stringify(words));
+}
+
+// =====================================================
+// VIEWS
+// =====================================================
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'quiz') renderQuiz();
+  if (name === 'reference') renderReference();
+  if (name === 'manage') renderManage();
+}
+
+// =====================================================
+// QUIZ
+// =====================================================
+function getCategories() {
+  const cats = [...new Set(words.map(w => w.category).filter(Boolean))];
+  return cats.sort();
+}
+
+function buildQuizFilters() {
+  const cats = getCategories();
+  const row = document.getElementById('quiz-filters');
+  const current = quizFilter;
+  row.innerHTML = '<button class="filter-btn' + (current==='all'?' active':'') + '" onclick="setFilter(\'all\', this)">All</button>';
+  cats.forEach(c => {
+    const active = current === c ? ' active' : '';
+    row.innerHTML += `<button class="filter-btn${active}" onclick="setFilter('${c}', this)">${c}</button>`;
+  });
+}
+
+function setFilter(cat, btn) {
+  quizFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  startQueue();
+}
+
+function startQueue() {
+  let pool = quizFilter === 'all' ? [...words] : words.filter(w => w.category === quizFilter);
+  // shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  quizQueue = pool;
+  quizIndex = 0;
+  revealed = false;
+  renderCard();
+}
+
+function renderQuiz() {
+  buildQuizFilters();
+  startQueue();
+}
+
+function renderCard() {
+  const area = document.getElementById('quiz-card-area');
+  if (!quizQueue.length) {
+    area.innerHTML = '<div class="quiz-empty">No words found. Add some in Manage Words.</div>';
+    return;
+  }
+  const word = quizQueue[quizIndex];
+  revealed = false;
+  area.innerHTML = `
+    <div class="card">
+      <div class="card-category">${word.category || ''}</div>
+      <div class="card-counter">${quizIndex + 1} / ${quizQueue.length}</div>
+      <div class="card-prompt-label">Translate to Danish</div>
+      <div class="card-english">${word.english}</div>
+      <div class="answer-area">
+        <input class="answer-input" id="answer-input" type="text" placeholder="type your answer…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="handleKey(event)">
+        <div class="feedback-msg" id="feedback"></div>
+        <div class="reveal-box" id="reveal-box">
+          <div class="reveal-danish">${word.danish}</div>
+          ${word.present || word.past ? `<div class="reveal-forms">
+            ${word.present ? `present: <span>${word.present}</span>` : ''}
+            ${word.present && word.past ? ' &nbsp;·&nbsp; ' : ''}
+            ${word.past ? `past: <span>${word.past}</span>` : ''}
+          </div>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn ghost" onclick="skipCard()">Skip →</button>
+      <button class="btn" onclick="checkAnswer()">Check</button>
+      <button class="btn primary" onclick="nextCard()" id="btn-next" style="display:none;">Next →</button>
+    </div>
+  `;
+  document.getElementById('answer-input').focus();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter') {
+    if (revealed) nextCard();
+    else checkAnswer();
+  }
+}
+
+function checkAnswer() {
+  if (revealed) return;
+  const word = quizQueue[quizIndex];
+  const input = document.getElementById('answer-input');
+  const val = input.value.trim().toLowerCase();
+  if (!val) {
+    revealAnswer(null);
+    return;
+  }
+  // Accept the base danish form or the present/past variants
+  const acceptList = [word.danish, word.present, word.past]
+    .filter(Boolean)
+    .map(s => s.toLowerCase().replace(/^at /, ''));
+  const clean = val.replace(/^at /, '');
+  const isCorrect = acceptList.includes(clean) || val === word.danish.toLowerCase();
+  revealAnswer(isCorrect);
+}
+
+function revealAnswer(correct) {
+  revealed = true;
+  const input = document.getElementById('answer-input');
+  const fb = document.getElementById('feedback');
+  const box = document.getElementById('reveal-box');
+  const nextBtn = document.getElementById('btn-next');
+  box.classList.add('show');
+  if (nextBtn) nextBtn.style.display = '';
+  if (correct === true) {
+    input.classList.add('correct');
+    fb.textContent = '✓ correct';
+    fb.className = 'feedback-msg correct';
+  } else if (correct === false) {
+    input.classList.add('wrong');
+    fb.textContent = '✗ not quite — see the answer below';
+    fb.className = 'feedback-msg wrong';
+  } else {
+    fb.textContent = 'Answer revealed';
+    fb.className = 'feedback-msg';
+  }
+}
+
+function nextCard() {
+  quizIndex = (quizIndex + 1) % quizQueue.length;
+  renderCard();
+}
+
+function skipCard() {
+  nextCard();
+}
+
+// =====================================================
+// REFERENCE
+// =====================================================
+function renderReference(search = '', catFilter = null) {
+  if (catFilter === null) {
+    catFilter = document.getElementById('ref-cat-filter')?.value || 'all';
+  }
+
+  // Populate category dropdown
+  const sel = document.getElementById('ref-cat-filter');
+  const cats = getCategories();
+  const currentCat = sel.value;
+  sel.innerHTML = '<option value="all">All categories</option>';
+  cats.forEach(c => {
+    sel.innerHTML += `<option value="${c}" ${c===currentCat?'selected':''}>${c}</option>`;
+  });
+  if (catFilter) sel.value = catFilter;
+
+  const q = search.toLowerCase();
+  const filtered = words.filter(w => {
+    const matchSearch = !q || w.english.toLowerCase().includes(q) || w.danish.toLowerCase().includes(q)
+      || (w.present||'').toLowerCase().includes(q) || (w.past||'').toLowerCase().includes(q);
+    const matchCat = catFilter === 'all' || w.category === catFilter;
+    return matchSearch && matchCat;
+  });
+
+  const tbody = document.getElementById('ref-body');
+  tbody.innerHTML = filtered.length ? filtered.map(w => `
+    <tr>
+      <td class="cell-english">${w.english}</td>
+      <td class="cell-danish">${w.danish}</td>
+      <td>${w.present || '<span style="color:var(--border)">—</span>'}</td>
+      <td>${w.past || '<span style="color:var(--border)">—</span>'}</td>
+      <td><span class="tag">${w.category || ''}</span></td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" style="color:var(--muted);padding:20px 14px;font-size:0.78rem;">No words found.</td></tr>';
+}
+
+// =====================================================
+// MANAGE
+// =====================================================
+function renderManage() {
+  const list = document.getElementById('manage-list');
+  document.getElementById('word-count').textContent = `(${words.length})`;
+  list.innerHTML = words.length ? words.map((w, i) => `
+    <div class="word-item">
+      <span class="word-item-english">${w.english}</span>
+      <span class="word-item-danish">${w.danish}</span>
+      <span class="word-item-cat">${w.category||''}</span>
+      <button class="delete-btn" onclick="deleteWord(${i})" title="Remove">×</button>
+    </div>
+  `).join('') : '<div style="padding:20px;color:var(--muted);font-size:0.75rem;">No words yet.</div>';
+}
+
+function addWord() {
+  const english = document.getElementById('add-english').value.trim();
+  const danish = document.getElementById('add-danish').value.trim();
+  const present = document.getElementById('add-present').value.trim();
+  const past = document.getElementById('add-past').value.trim();
+  const category = document.getElementById('add-category').value.trim() || 'Custom';
+  const status = document.getElementById('add-status');
+
+  if (!english || !danish) {
+    status.textContent = 'English and Danish are required.';
+    status.style.color = 'var(--accent)';
+    return;
+  }
+
+  words.push({ english, danish, present, past, category });
+  saveWords();
+  renderManage();
+
+  ['add-english','add-danish','add-present','add-past'].forEach(id => document.getElementById(id).value = '');
+  status.textContent = `✓ "${english}" added.`;
+  status.style.color = 'var(--green)';
+  setTimeout(() => status.textContent = '', 2500);
+}
+
+function deleteWord(index) {
+  if (!confirm(`Remove "${words[index].english}"?`)) return;
+  words.splice(index, 1);
+  saveWords();
+  renderManage();
+}
+
+function bulkImport() {
+  const raw = document.getElementById('bulk-paste').value.trim();
+  const status = document.getElementById('bulk-status');
+  if (!raw) return;
+  const lines = raw.split('\n').filter(l => l.trim());
+  let added = 0;
+  lines.forEach(line => {
+    const parts = line.split('|').map(s => s.trim());
+    if (parts.length >= 2 && parts[0] && parts[1]) {
+      words.push({
+        english: parts[0],
+        danish: parts[1],
+        present: parts[2] || '',
+        past: parts[3] || '',
+        category: parts[4] || 'Custom'
+      });
+      added++;
+    }
+  });
+  if (added) {
+    saveWords();
+    renderManage();
+    document.getElementById('bulk-paste').value = '';
+    status.textContent = `✓ ${added} word${added>1?'s':''} imported.`;
+    status.style.color = 'var(--green)';
+  } else {
+    status.textContent = 'No valid lines found. Check the format.';
+    status.style.color = 'var(--accent)';
+  }
+  setTimeout(() => status.textContent = '', 3000);
+}
+
+function exportWords() {
+  const json = JSON.stringify(words, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'dansk-words.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error();
+      words = imported;
+      saveWords();
+      renderManage();
+      alert(`Imported ${words.length} words.`);
+    } catch {
+      alert('Invalid JSON file.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// =====================================================
+// INIT
+// =====================================================
+loadWords();
+renderQuiz();
+</script>
+</body>
+</html>
