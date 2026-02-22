@@ -175,7 +175,7 @@ tr:hover td { background: var(--paper); }
     <h1>D<em>a</em>nsk</h1>
     <div class="tagline">Danish Practice</div>
   </div>
-  <div class="version">v2.0</div>
+  <div class="version">v2.1</div>
 </header>
 
 <nav>
@@ -243,9 +243,17 @@ tr:hover td { background: var(--paper); }
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>English</th><th>Infinitive</th><th>Present</th><th>Past</th>
-            <th>Pres. perfect</th><th>Past perfect</th><th>Future</th><th>Conditional</th>
-            <th>Imp. perfect</th><th>Passive</th><th>Imperative</th><th>Cat.</th>
+            <th>English</th><th>Infinitive</th>
+            <th>Nutid<br><span style="font-weight:300;opacity:0.6;">Present</span></th>
+            <th>Datid<br><span style="font-weight:300;opacity:0.6;">Past</span></th>
+            <th>Førnutid<br><span style="font-weight:300;opacity:0.6;">Pres. perfect</span></th>
+            <th>Førdatid<br><span style="font-weight:300;opacity:0.6;">Past perfect</span></th>
+            <th>Fremtid<br><span style="font-weight:300;opacity:0.6;">Future</span></th>
+            <th>Konditionalis<br><span style="font-weight:300;opacity:0.6;">Conditional</span></th>
+            <th>Fremtid perf.<br><span style="font-weight:300;opacity:0.6;">Fut. perfect</span></th>
+            <th>Passiv<br><span style="font-weight:300;opacity:0.6;">Passive</span></th>
+            <th>Bydemåde<br><span style="font-weight:300;opacity:0.6;">Imperative</span></th>
+            <th>Cat.</th>
           </tr></thead>
           <tbody id="ref-verb-body"></tbody>
         </table>
@@ -293,15 +301,15 @@ const PRONOUNS = [
 // ═══════════════════════════════════════════════
 // key: field name on verb object
 const TENSES = [
-  { key:'present',      label:'Present',           note:'jeg er' },
-  { key:'past',         label:'Past',               note:'jeg var' },
-  { key:'presPerfect',  label:'Present perfect',    note:'jeg har været' },
-  { key:'pastPerfect',  label:'Past perfect',       note:'jeg havde været' },
-  { key:'future',       label:'Future',             note:'jeg vil være' },
-  { key:'conditional',  label:'Conditional',        note:'jeg ville være' },
-  { key:'futPerfect',   label:'Future perfect',     note:'jeg vil have været' },
-  { key:'passive',      label:'Passive',            note:'det bruges' },
-  { key:'imperative',   label:'Imperative',         note:'vær!' },
+  { key:'present',      label:'Present',        da:'Nutid',                note:'jeg er' },
+  { key:'past',         label:'Past',           da:'Datid',                note:'jeg var' },
+  { key:'presPerfect',  label:'Pres. perfect',  da:'Førnutid',             note:'jeg har været' },
+  { key:'pastPerfect',  label:'Past perfect',   da:'Førdatid',             note:'jeg havde været' },
+  { key:'future',       label:'Future',         da:'Fremtid',              note:'jeg vil være' },
+  { key:'conditional',  label:'Conditional',    da:'Konditionalis',        note:'jeg ville være' },
+  { key:'futPerfect',   label:'Fut. perfect',   da:'Fremtid perfektum',    note:'jeg vil have været' },
+  { key:'passive',      label:'Passive',        da:'Passiv',               note:'det bruges' },
+  { key:'imperative',   label:'Imperative',     da:'Bydemåde',             note:'vær!' },
 ];
 
 // ═══════════════════════════════════════════════
@@ -740,7 +748,7 @@ function initConj(){
   const trow=document.getElementById('cj-tense-filters');
   trow.innerHTML=`<button class="filter-btn${cjTense==='all'?' active':''}" onclick="setCjTense('all',this)">All tenses</button>`;
   TENSES.forEach(t=>{
-    trow.innerHTML+=`<button class="filter-btn${cjTense===t.key?' active':''}" onclick="setCjTense('${t.key}',this)">${t.label}</button>`;
+    trow.innerHTML+=`<button class="filter-btn${cjTense===t.key?' active':''}" onclick="setCjTense('${t.key}',this)">${t.da} <span style="opacity:0.5;font-size:0.6em;">${t.label}</span></button>`;
   });
   startCjQueue();
 }
@@ -770,8 +778,10 @@ function renderCjCard(){
   const area=document.getElementById('cj-card');
   if(!cjQueue.length){ area.innerHTML='<div class="empty-msg">No conjugations for this selection.<br>Some tenses (e.g. Imperative) don\'t apply to modal verbs.</div>'; return; }
   const d=cjQueue[cjIdx], v=d.verb; cjRevealed=false;
-  const tLabel=TENSES.find(t=>t.key===d.tense)?.label||d.tense;
-  const tNote=TENSES.find(t=>t.key===d.tense)?.note||'';
+  const tObj=TENSES.find(t=>t.key===d.tense)||{label:d.tense,da:'',note:''};
+  const tLabel=tObj.label;
+  const tDa=tObj.da;
+  const tNote=tObj.note||'';
   // mini table: all pronouns for this tense
   const tableRows=PRONOUNS.map(p=>`
     <tr class="${p.da===d.pronoun.da?'hl':''}">
@@ -779,7 +789,7 @@ function renderCjCard(){
     </tr>`).join('');
   area.innerHTML=`
     <div class="card">
-      <div class="card-meta"><span>${tLabel}</span><span>${cjIdx+1} / ${cjQueue.length}</span></div>
+      <div class="card-meta"><span>${tDa} <span style="color:var(--border);margin:0 4px;">·</span> ${tLabel}</span><span>${cjIdx+1} / ${cjQueue.length}</span></div>
       <div class="card-prompt-label">${v.english} &nbsp;·&nbsp; ${v.danish}</div>
       <div class="pronoun-block">
         <div class="pronoun-badge">${d.pronoun.da}</div>
@@ -794,8 +804,8 @@ function renderCjCard(){
         <div class="reveal-box" id="cjr">
           <div class="reveal-answer">${d.pronoun.da} ${d.answer}</div>
           <div class="reveal-note">
-            ${tLabel} — same form for all pronouns
-            ${tNote?'<br><span style="color:var(--border)">e.g. '+tNote+'</span>':''}
+            ${tDa} (${tLabel}) — same form for all pronouns
+            ${tNote?'<br><span style="color:var(--muted)">e.g. '+tNote+'</span>':''}
           </div>
           <table class="conj-mini">${tableRows}</table>
         </div>
